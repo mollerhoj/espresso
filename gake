@@ -1,0 +1,17 @@
+#!/bin/sh
+set -e
+
+if test -e .espresso; then
+  echo 'building...'
+else
+  echo 'Error: This is not an espresso folder'
+  exit
+fi
+
+GAME_PATH=$(pwd)
+ESPRESSO_PATH=$(dirname $0)
+
+cd $ESPRESSO_PATH
+echo $ESPRESSO_PATH
+
+cake build

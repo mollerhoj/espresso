@@ -55,7 +55,6 @@ remove_from_array = (arr,reg) ->
       arr.remove i
   return arr
 
-
 # Return a list of all images 
 images =  ->
   dir = fs.readdirSync("./app/" + game_name() + "/gfx/")
@@ -154,41 +153,8 @@ task 'build', 'Build single application file from source files', ->
           throw err if err
           console.log 'Done.'
 
-task 'export', 'Export the game', ->
-  generate_AppData()
-  files = classlist()
-  folder = 'www/games/' + game_name() + "/"
-  if not fs.existsSync folder
-    fs.mkdirSync folder
-  appContents = new Array remaining = files.length
-  for file, index in files then do (file, index) ->
-    fs.readFile "app/#{file}.coffee", 'utf8', (err, fileContents) ->
-      throw err if err
-      appContents[index] = fileContents
-      process() if --remaining is 0
-  process = ->
-    fs.writeFile 'www/games/' + game_name() + '/game.coffee', appContents.join('\n\n'), 'utf8', (err) ->
-      throw err if err
-      exec 'coffee --compile ' + folder + 'game.coffee', (err, stdout, stderr) ->
-        throw err if err
-        console.log stdout + stderr
-        fs.unlink folder + 'game.coffee', (err) ->
-          throw err if err
-          console.log 'Done.'
-
-task 'minify', 'Minify the resulting application file after build', ->
-  exec 'java -jar "../compiler.jar" --js www/games/' + game_name() + '/game.js --js_output_file www/games/' + game_name() + '/game.product.js', (err, stdout, stderr) ->
-    throw err if err
-    console.log stdout + stderr
-
 option '-n','--game_name [GAME_NAME]', 'set the name of the game', ->
   console.log 'test'
-
-task 'docess', 'Generate documentation for the engine', ->
-  exec 'docco -o enginedocs/ app/*.coffee'
-
-task 'document', 'Generate documention for the current game', ->
-  exec 'docco -o docs app/' + game_name() + '/ent/*.coffee'
 
 task 'switch', 'Switch to work on the game specified in by -n', (options) ->
   gm = options.game_name or 'none'
