@@ -1,0 +1,54 @@
+Align: Center
+
+button types: Links,
+              Simple data manipulation,
+              Advanced data switcher(function),
+              start game.
+
+0:
+  Title: Main menu
+  Buttons:
+    1:
+      Label: Play
+      Link: 1
+    2:
+      Label: Options
+      Link: 2
+    3:
+      Label: About
+      Link: 3
+
+1:
+  Title: Choose Level
+  Layout: Grid
+  Buttons:
+    1:
+      Label: Back
+      Link: 0
+
+    2:
+      Label: Level 1
+      Image: img_level1
+      Action: level = 1; play
+
+2:
+  Title: Options
+  Buttons:
+    1:
+      Label: Sound
+      Type: Boolean
+      Data: global.sound
+    2:
+      Label: Music
+      Type: Boolean
+      Data: global.music
+    3:
+      Label: Back:
+      Link: 0
+
+3:
+  Title: Controles
+  Buttons:
+    1:
+      Label: Back
+      Link: 0
