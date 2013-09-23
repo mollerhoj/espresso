@@ -22,11 +22,11 @@ class Art
 
     #If in development, load placeholder
     if Settings.mode == 'Development'
-      Art.load('PlaceHolder','../src/gfx/PlaceHolder.png')
+      Art.load('PlaceHolder','../app/gfx/PlaceHolder.png')
 
     #Load all sprites
     for key,value of AppData.sprites
-      Art.load(key,"../src/" + AppData.game_name + "/gfx/" + value)
+      Art.load(key,"../app/" + AppData.game_name + "/gfx/" + value)
 
     Art.remove_anti_alias()
     Art.scale Settings.scale

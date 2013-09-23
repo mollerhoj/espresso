@@ -1,154 +1,57 @@
-Make a menu for the fighter game from Menu DSL,
-make full fighter game - VERY SIMPLE!
-make default game folder.
+Testable code needed!
+All folders should be able to have subpaths:
+Template folder could have some template file examples.
 
-Settings:
-  - Reinstall NERDTree
-  - zsh git completion
-  - a folder in the game folder with ent-parents?
-
-Make a ui folder with generic UI elements:
-Menu
-Button (Label?)
-Icon
-Scroller?
-Input field/Up down etc.
-
-move gfx folder one up
-
-make a games folder for all the games
-
-clean up the Art class.
-
-Toolbox class.
-
-Make a Menu UI element. This should clean up the level editor
-
-Move to better folder
-
-Art class: Constant drawing should also be constant for zoomlevels
-
-z value priority list structure.
-
-SAVING DATA: Onslaugt Arena - Saving with local storage
-
-Timer class
-
-A tree structured entity ownmenship. // is that really of any value?
-
-Make a pointer lock mechanism:
-http://www.html5rocks.com/en/tutorials/pointerlock/intro/
-
-copy from
-http://www.html5rocks.com/en/tutorials/casestudies/onslaught/
-
-Path finding
-
-Platform engine clean up
-
-__IDEAS AND THOUGHTS__
-
-Make a seperate class for camera? Split up the Art class a bit?
-Entity = UI.
-No such thing as a UI element. 
-Mouse collision moved to Collision object.
-Standard UI objects to a standard library.
-
-
-__LEVEL_EDITOR___
-The Level editor must not be affected by zoomlevel, and should therefore be
-vector graphics.
-
-Switching levels
-Placing objects with preset variables
-Undo / Redo
-Menu with scrollbar
-Grid size setting
-Grid work with zooming
-
-Move objects
-
-Buttons:
-Show/Hide menu
-Snap to grid
-Move camera
-Jump to 0,0
-Create entity
-Remove entity
-Zoom in
-Zoom out
-
-___EXPORT_GAMES__
-
-Minimalize js.
-create the website dynmaticly from games and description+ introduction files.
-
-__ERROR__MESSAGES__
-error system
-image file not fould
-index not found
-
-___CANVAS_COMPOSITE___
-Checkout clip() method. Useful?
-Canvas composite:
-Make a buffer canvas. Only 5 works cross browser:
-http://www.rekim.com/2011/02/11/html5-canvas-globalcompositeoperation-browser-handling/
-
-_________________WAIT______________
-animation: Know index_max
-w Camera: Rotation, Have Art offset and scale values? Lower coupling?
-w Screens + UI Menu
-w Create canvas in seperate class instead of world
-w coffeescript getters and setters
-w menus and screens
-w entity value that makes object follow screen? (Maybe remove the drawC
-    methods from Art?)
-w Ui Menu element
-w Ui elements loaded correctly
-w UI objects.. How should they work? (remove the step function?)
-w x and y offset to the center?
-w define meaningful list and array functions (like copy)
-w splice Art in typogray and art?
-w documentation
-w Brass monkey
-___________________KNOWN BUGS________
-
-Mysterious 'nd' or 'd' in AppData file appears random
-___________________DONE______________
-sign
-alpha
-look at making code more clean
-toggle
-entities has a type variable that can be used with collisions
-Zooming
-no sprite object: send entity as sprite
-anitmation
-Reset game? Start load and end game? Screens? Rooms?
-Load levels from seperate file
-folders for unused images and entities
-Art offset. Should mouse position be considered?
-leveleditor drag objes
-leveleditor snap to grid
-define a grid? - draw it in level editor
-mouse right click
-leveleditor remove entities
-Keyboard should have key list
-leveleditor move Art.offset with arrow keys. Jump to 0,0 with with key
-Cakefile clean with functions etc.
-Text draw move down
-move classes into entity folder
-start x
-start y
-Callbacks?
-Keyboard presses to work
-! make a mouse click and keyboard press engine
-leveleditor show/hide
-leveleditor output to output field beneath the game.
-scaling
-Entity var sprite name
-Folders for each game / Game name (seperate game from engine)
-Scaling work properly, and zoom in level editor
-Sprite_flip
-fix scale
-All image types should work (also svg)
-Lazy image loading
+espresso path:
+test/
+  test_*
+app/
+  Art.. split to:
+    Text (public methods for drawing)
+    Image (public methods for showing images)
+            privately load all the images
+    Vector (public methods for vector drawing)
+  Collision (public methods for calc collision)
+  Entity (Base class)
+  Game + start -> Rename: engine (Engine)
+  World -> extends entity and can have children. has a load method, that loads a .lvl file, and builts a level inside of it
+  Current worldclass must be split into: engine, entity and a level manager
+  Level (public methods to switch and create levels)
+  Keyboard (Keyboard handling)
+  Utils (Minor extensions and helper methods)
+  appdata.tmp <- list resources + name of app
+scripts/
+  espresso scripts:
+    espresso create entity player
+    espresso create level lvl0
+    espresso new myapp
+    espresso build -> cake build with dev=true
+    espresso export -> cake build with dev=false
+    espresso help
+dev/
+  vector editor
+  flow level editor
+  grid level editor
+  sprite editor
+  sound editor
+template/
+  .espresso <- this is an espresso app (file)
+  settings <- setable
+  sounds
+  sprites/
+  vectors/ (math+graphics?)
+  fonts/
+    espresso.font
+  entities/
+  levels/
+  ui/ (maybe)
+  output/
+    warning.txt (this is a compile-to folder)
+    index (with level editor)
+    (game.js) (compiled, dev flag)
+    css (with level editor)
+  export/
+    warning.txt (this is a compile-to folder)
+    index
+    (game.js) (compiled, dev flag)
+    css

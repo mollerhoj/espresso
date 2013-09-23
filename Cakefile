@@ -58,7 +58,7 @@ remove_from_array = (arr,reg) ->
 
 # Return a list of all images 
 images =  ->
-  dir = fs.readdirSync("./src/" + game_name() + "/gfx/")
+  dir = fs.readdirSync("./app/" + game_name() + "/gfx/")
 
   dir = remove_from_array(dir,/^\..*/)
 
@@ -67,7 +67,7 @@ images =  ->
 
 # Return a list of all entities in the game
 entities = (workmode) ->
-  dir = fs.readdirSync("./src/" + game_name() + "/ent/")
+  dir = fs.readdirSync("./app/" + game_name() + "/ent/")
 
   dir = remove_from_array(dir,/^\..*/)
 
@@ -77,7 +77,7 @@ entities = (workmode) ->
 
 # Generate the AppData class
 generate_AppData = ->
-  output = "./src/AppData.coffee"
+  output = "./app/AppData.coffee"
 
   # clear file? (trying to remove random bug)
   fs.writeFileSync output, '','utf8', (err) -> throw err if err
@@ -134,13 +134,13 @@ classlist = (workmode) ->
 
 # BUILD
 task 'build', 'Build single application file from source files', ->
-  exec 'cp -r src/'+game_name()+'/fonts public' # copy fonts
-  exec 'cp -r src/'+game_name()+'/sfx public' # copy sounds/music
+  exec 'cp -r app/'+game_name()+'/fonts public' # copy fonts
+  exec 'cp -r app/'+game_name()+'/sfx public' # copy sounds/music
   generate_AppData()
   files = classlist('Development')
   appContents = new Array remaining = files.length
   for file, index in files then do (file, index) ->
-    fs.readFile "src/#{file}.coffee", 'utf8', (err, fileContents) ->
+    fs.readFile "app/#{file}.coffee", 'utf8', (err, fileContents) ->
       throw err if err
       appContents[index] = fileContents
       process() if --remaining is 0
@@ -162,7 +162,7 @@ task 'export', 'Export the game', ->
     fs.mkdirSync folder
   appContents = new Array remaining = files.length
   for file, index in files then do (file, index) ->
-    fs.readFile "src/#{file}.coffee", 'utf8', (err, fileContents) ->
+    fs.readFile "app/#{file}.coffee", 'utf8', (err, fileContents) ->
       throw err if err
       appContents[index] = fileContents
       process() if --remaining is 0
@@ -185,10 +185,10 @@ option '-n','--game_name [GAME_NAME]', 'set the name of the game', ->
   console.log 'test'
 
 task 'docess', 'Generate documentation for the engine', ->
-  exec 'docco -o enginedocs/ src/*.coffee'
+  exec 'docco -o enginedocs/ app/*.coffee'
 
 task 'document', 'Generate documention for the current game', ->
-  exec 'docco -o docs src/' + game_name() + '/ent/*.coffee'
+  exec 'docco -o docs app/' + game_name() + '/ent/*.coffee'
 
 task 'switch', 'Switch to work on the game specified in by -n', (options) ->
   gm = options.game_name or 'none'
@@ -198,10 +198,10 @@ task 'switch', 'Switch to work on the game specified in by -n', (options) ->
 task 'new', 'Make a new game folder to start the game', (options) ->
   gm = options.game_name
   fs.writeFileSync '.name', gm,'utf8', (err) -> throw err if err
-  fs.mkdirSync 'src/' + gm
-  fs.mkdirSync 'src/' + gm + "/ent"
-  fs.mkdirSync 'src/' + gm + "/sfx"
-  fs.mkdirSync 'src/' + gm + "/gfx"
+  fs.mkdirSync 'app/' + gm
+  fs.mkdirSync 'app/' + gm + "/ent"
+  fs.mkdirSync 'app/' + gm + "/sfx"
+  fs.mkdirSync 'app/' + gm + "/gfx"
 
   settings_text =
     "class Settings" + newline +
@@ -237,15 +237,15 @@ task 'new', 'Make a new game folder to start the game', (options) ->
     "# A default UI menu to be used as the game menu" + newline +
     "class Menu"
   
-  fs.writeFileSync 'src/' + gm + '/Settings.coffee',settings_text,'utf8', (err) ->
+  fs.writeFileSync 'app/' + gm + '/Settings.coffee',settings_text,'utf8', (err) ->
     throw err if err
 
-  fs.writeFileSync 'src/' + gm + '/LevelData.coffee',levelData_text,'utf8', (err) ->
+  fs.writeFileSync 'app/' + gm + '/LevelData.coffee',levelData_text,'utf8', (err) ->
     throw err if err
 
-  fs.writeFileSync 'src/' + gm + '/Button.coffee',button_text,'utf8', (err) ->
+  fs.writeFileSync 'app/' + gm + '/Button.coffee',button_text,'utf8', (err) ->
     throw err if err
 
-  fs.writeFileSync 'src/' + gm + '/Menu.coffee',menu_text,'utf8', (err) ->
+  fs.writeFileSync 'app/' + gm + '/Menu.coffee',menu_text,'utf8', (err) ->
     throw err if err
 
