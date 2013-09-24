@@ -22,7 +22,7 @@ class Art
 
     #Load all sprites
     for key,value of AppData.sprites
-      Art.load(key,"../sprites/" + value)
+      Art.load(key,"sprites/" + value)
 
     Art.remove_anti_alias()
     Art.scale Settings.scale

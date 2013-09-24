@@ -110,7 +110,8 @@ task 'tmp', 'Temp', ->
 # Copy resources
 copy_resources = ->
   exec 'cp -r app/'+game_name()+'/fonts app/' + game_name() + '/output' # copy fonts
-  exec 'cp -r app/'+game_name()+'/sounds app/' + game_name() + '/output' # copy sounds/music
+  exec 'cp -r app/'+game_name()+'/sounds app/' + game_name() + '/output' # copy sounds
+  exec 'cp -r app/'+game_name()+'/sprites app/' + game_name() + '/output' # copy sprites
 
 # Load Classes
 load_classes = (files) ->

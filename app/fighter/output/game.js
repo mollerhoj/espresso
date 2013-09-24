@@ -190,7 +190,7 @@
       _ref = AppData.sprites;
       for (key in _ref) {
         value = _ref[key];
-        Art.load(key, "../sprites/" + value);
+        Art.load(key, "sprites/" + value);
       }
       Art.remove_anti_alias();
       return Art.scale(Settings.scale);
@@ -907,7 +907,7 @@
 
     Hero.prototype.init = function() {
       console.log('hero created');
-      return this.fireball_sound = new Audio('sfx/dao.wav');
+      return this.fireball_sound = new Audio('sounds/dao.wav');
     };
 
     Hero.prototype.step = function() {

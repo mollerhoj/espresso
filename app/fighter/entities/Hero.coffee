@@ -7,7 +7,7 @@ class Hero extends Entity
 
   init: ->
     console.log 'hero created'
-    @fireball_sound = new Audio('sfx/dao.wav')
+    @fireball_sound = new Audio('sounds/dao.wav')
 
   step: ->
     face_x = 0
