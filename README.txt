@@ -12,7 +12,7 @@ agile development.
 
 Its API resamples the way 'Game Maker' by Mark Overmars works.
 
-# Why is iterative design so important?
+# Idea and philosopy
 In classic software, an iterative development process help catch bugs early,
 and lets the system be designed as the developer learns. In indie game
 development, iterative processes lets the developer design games as
@@ -20,6 +20,10 @@ development goes.
 
 It is not only more fun to develop game ideas iteratively. It produces games
 that are more original, and more fun.
+
+Just like Bret Victor believes that artists should have an imediate connection
+with their work, I believe that artistist need as high a number of iterations
+as possible. (This is almost, but not completely the same thing)
 
 # Why is it faster to build games with Espresso?
 
