@@ -187,13 +187,10 @@
       Art.canvas = canvas;
       Art.canvas.textBaseline = 'top';
       Art.font_update();
-      if (Settings.mode === 'Development') {
-        Art.load('PlaceHolder', '../app/gfx/PlaceHolder.png');
-      }
       _ref = AppData.sprites;
       for (key in _ref) {
         value = _ref[key];
-        Art.load(key, "../app/" + AppData.game_name + "/gfx/" + value);
+        Art.load(key, "../sprites/" + value);
       }
       Art.remove_anti_alias();
       return Art.scale(Settings.scale);
@@ -241,6 +238,7 @@
       }
       result = Art.images[name];
       if (!result) {
+        console.log(name);
         result = Art.images['PlaceHolder'];
       }
       return result;
@@ -1396,6 +1394,7 @@
       'Hero7': 'Hero7.png',
       'Hero8': 'Hero8.png',
       'Hero9': 'Hero9.png',
+      'PlaceHolder': 'PlaceHolder.png',
       'Skull': 'Skull.png'
     };
 

@@ -20,13 +20,9 @@ class Art
     Art.canvas.textBaseline = 'top'
     Art.font_update()
 
-    #If in development, load placeholder
-    if Settings.mode == 'Development'
-      Art.load('PlaceHolder','../app/gfx/PlaceHolder.png')
-
     #Load all sprites
     for key,value of AppData.sprites
-      Art.load(key,"../app/" + AppData.game_name + "/gfx/" + value)
+      Art.load(key,"../sprites/" + value)
 
     Art.remove_anti_alias()
     Art.scale Settings.scale
@@ -62,6 +58,7 @@ class Art
       name = name + index
     result = Art.images[name]
     if not result
+      console.log name
       result = Art.images['PlaceHolder']
     return result
 

@@ -44,13 +44,13 @@ remove_from_array = (arr,reg) ->
 
 #Get all sprites
 sprites =  ->
-  dir = fs.readdirSync("./app/" + game_name() + "/gfx/")
+  dir = fs.readdirSync("./app/" + game_name() + "/sprites/")
   dir = remove_from_array(dir,/^\..*/)
   return dir
 
 #Get all entities
 entities = ->
-  dir = fs.readdirSync("./app/" + game_name() + "/ent/")
+  dir = fs.readdirSync("./app/" + game_name() + "/entities/")
   dir = remove_from_array(dir,/^\..*/)
   dir = (f.replace(/.coffee/,'') for f in dir) # remove .coffee ending
   return dir
@@ -92,7 +92,7 @@ generate_AppData = ->
 # Returns the list of classes in the right order
 classlist = ->
   dir = entities()                   # get all entities
-  dir = ((f=game_name()+"/ent/"+f) for f in dir)  # unshift ent
+  dir = ((f=game_name()+"/entities/"+f) for f in dir)  # unshift ent
 
   files = before_files.concat()       # files = beforefiles
   files.push game_name() + "/Menu"    # + menu
@@ -111,8 +111,8 @@ task 'tmp', 'Temp', ->
 
 # Copy resources
 copy_resources = ->
-  exec 'cp -r app/'+game_name()+'/fonts public' # copy fonts
-  exec 'cp -r app/'+game_name()+'/sfx public' # copy sounds/music
+  exec 'cp -r app/'+game_name()+'/fonts app/' + game_name() + '/output' # copy fonts
+  exec 'cp -r app/'+game_name()+'/sounds app/' + game_name() + '/output' # copy sounds/music
 
 # Load Classes
 load_classes = (files) ->
@@ -123,12 +123,12 @@ load_classes = (files) ->
       appContents[index] = fileContents
       process() if --remaining is 0
   process = ->
-    fs.writeFile 'public/game.coffee', appContents.join('\n\n'), 'utf8', (err) ->
+    fs.writeFile 'app/'+game_name()+'/output/game.coffee', appContents.join('\n\n'), 'utf8', (err) ->
       throw err if err
-      exec 'coffee --compile public/game.coffee', (err, stdout, stderr) ->
+      exec 'coffee --compile app/'+game_name()+'/output/game.coffee', (err, stdout, stderr) ->
         throw err if err
         console.log stdout + stderr
-        fs.unlink 'public/game.coffee', (err) ->
+        fs.unlink 'app/'+game_name()+'/output/game.coffee', (err) ->
           throw err if err
           console.log 'Done.'
 

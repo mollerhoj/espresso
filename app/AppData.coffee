@@ -31,4 +31,5 @@ class AppData
    'Hero7': 'Hero7.png'
    'Hero8': 'Hero8.png'
    'Hero9': 'Hero9.png'
+   'PlaceHolder': 'PlaceHolder.png'
    'Skull': 'Skull.png'
