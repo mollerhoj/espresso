@@ -1,5 +1,8 @@
 class AppData
   @game_name = "fighter"
+  @width = 320
+  @height = 240
+  @scale = 2
   @entities:
    'Board': Board
    'Explosion': Explosion

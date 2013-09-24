@@ -7,7 +7,11 @@ espresso_path = '/Users/mem/work/coffee/espresso'
 newline = "\n"
 
 #Global settings
-#width,height,zoom
+#TODO: Move to seperate file
+settings_width= 320
+settings_height= 240
+settings_scale= 2
+settings_background= 'Background'
 
 before_files  = [
   'Utils'
@@ -27,10 +31,7 @@ after_files = [
 
 #Get name of the game
 game_name = ->
-  x = fs.readFileSync '.name','utf8', (err) ->
-    throw err if err
-  x = x.replace /(\r\n|\n|\r)/, ""
-  return x
+  return 'fighter' 
 
 # EXTENDING JAVASCRIPT ARRAYS WITH A REMOVE METHOD
 Array::remove = (e) -> @[t..t] = [] if (t = @indexOf(e)) > -1
@@ -69,10 +70,17 @@ generate_AppData = ->
   file = "./app/AppData.coffee"
   clear_file(file)
   put_to_file(file,'class AppData')
+  
+  # add name
   put_to_file(file,'  @game_name = "' + game_name() + '"')
-  put_to_file(file,'  @entities:')
+
+  # add settings
+  put_to_file(file,'  @width = ' + settings_width )
+  put_to_file(file,'  @height = ' + settings_height )
+  put_to_file(file,'  @scale = ' + settings_scale )
 
   # add entities
+  put_to_file(file,'  @entities:')
   list = entities()
   for f in list
     f = "   '" + f + "': " + f + newline
@@ -80,10 +88,8 @@ generate_AppData = ->
       throw err if err
   
   # add sprites
-  list = sprites()
-
   put_to_file(file,'  @sprites:')
-    
+  list = sprites()
   for f in list
     f = "   '" + f.replace(/(.png|.svg|.bmp|.gif|.jpg)/,'') + "': '" + f + "'" + newline
     fs.appendFileSync file,f,'utf8',(err) ->
@@ -99,9 +105,9 @@ classlist = ->
   files = files.concat(dir)   # + ent
 
   files = files.concat(after_files)  # insert after files
-  files.push game_name() + "/Settings" # should this be before the previous line for some reason? I have moved it down. If there are no problems, I can Set Setting, LevelData and EditorData by themselves somewhere.
-  files.push game_name() + "/LevelData"
-  files.push game_name() + "/EditorData"
+
+  #Load levels TODO: load all levels
+  files.push game_name() + "/levels/Level1"
   return files
 
 task 'tmp', 'Temp', ->

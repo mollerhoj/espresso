@@ -19,7 +19,7 @@ class World
 
   # create level
   @create_level: () ->
-    for key,value of LevelData.level
+    for key,value of Level1.level
       World.spawn(value.name,value.x,value.y)
 
   # destroy all
@@ -87,8 +87,8 @@ class World
   # Create an HTML5 canvas element and append it to the document
   @create_canvas: ->
     canvas = document.createElement("canvas")
-    canvas.width = Settings.width
-    canvas.height = Settings.height
+    canvas.width = AppData.width * AppData.scale
+    canvas.height = AppData.height * AppData.scale
     $("#game").append(canvas)
     return canvas.getContext("2d")
 
@@ -96,7 +96,7 @@ class World
   @draw: ->
     #Draw background
     Art.color '#EFF8FB'
-    Art.rectangleC 0,0,Settings.width / Art.get_scale(),Settings.height / Art.get_scale(),true
+    Art.rectangleC 0,0,AppData.width * AppData.scale / Art.get_scale(),AppData.height * AppData.scale / Art.get_scale(),true
 
     #Sort for z values. not tested.
     World._entities.sort (a,b) ->

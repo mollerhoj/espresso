@@ -25,7 +25,7 @@ class Art
       Art.load(key,"sprites/" + value)
 
     Art.remove_anti_alias()
-    Art.scale Settings.scale
+    Art.scale AppData.scale
 
   #Is called everytime an SpriteImage has been loaded. When all has been loaded it calls the callback function.
   @image_loaded: ->
