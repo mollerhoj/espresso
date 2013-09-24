@@ -6,7 +6,3 @@ class LevelData
       name: 'Hero'
       x: 138
       y: 103
-    2:
-      name: 'GameMenu'
-      x: 20
-      y: 220

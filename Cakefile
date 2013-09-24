@@ -95,8 +95,6 @@ classlist = ->
   dir = ((f=game_name()+"/entities/"+f) for f in dir)  # unshift ent
 
   files = before_files.concat()       # files = beforefiles
-  files.push game_name() + "/Menu"    # + menu
-  files.push game_name() + "/Button"  # + button
 
   files = files.concat(dir)   # + ent
 

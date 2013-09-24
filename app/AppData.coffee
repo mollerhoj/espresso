@@ -4,7 +4,6 @@ class AppData
    'Board': Board
    'Explosion': Explosion
    'Fireball': Fireball
-   'GameMenu': GameMenu
    'Hero': Hero
    'Skull': Skull
   @sprites:
