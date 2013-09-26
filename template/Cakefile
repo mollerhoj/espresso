@@ -1,0 +1,201 @@
+#Requirements
+{spawn, exec} = require 'child_process'
+fs     = require 'fs'
+path = require 'path'
+
+#Global vars
+espresso_path = '/Users/mem/work/coffee/espresso/'
+
+#Global settings
+#TODO: Move to seperate file
+settings_width= 320
+settings_height= 240
+settings_scale= 2
+settings_background= 'Background'
+
+#Espresso files
+#TODO: Make sense of why some must be before/after
+before_files  = [
+  'app/Utils'
+	'app/Entity'
+  'app/Art'
+  'app/Collision'
+	'app/Game'
+	'app/Keyboard'
+	'app/World'
+]
+
+after_files = [
+  'app/AppData'
+	'app/SpriteImage'
+  'app/start'
+]
+
+# HELPER METHODS
+
+# Get all resources from a folder
+harvest = (resource) ->
+  dir = fs.readdirSync(resource)
+  dir = remove_from_array(dir,/^\..*/)
+  return dir
+
+# Extending array class with remove method
+Array::remove = (e) -> @[t..t] = [] if (t = @indexOf(e)) > -1
+
+# Remove all regexp matches from array
+remove_from_array = (arr,reg) ->
+  temp_arr = arr.slice(0)
+  for i in temp_arr
+    if reg.test i
+      arr.remove i
+  return arr
+
+#remove extensions
+remove_extension = (str) ->
+  str.replace(/\.[^/.]+$/,'')
+
+remove_extensions = (array) ->
+  (f=remove_extension(f) for f in array)
+
+#Clear a file
+clear_file = (file) ->
+  fs.writeFileSync file, '','utf8', (err) -> throw err if err
+
+#Put to a file
+newline = "\n"
+put_to_file = (file,put) ->
+  fs.appendFileSync file, put + newline,'utf8', (err) ->
+    throw err if err
+
+# Append espresso path to files in array
+append_espresso_path = (files) ->
+  ((file=espresso_path + file) for file in files) 
+
+# Get name of the app
+app_name = ->
+  return path.basename(__dirname)
+
+# Get the list of classes to be loaded in the right order
+classlist = ->
+  files = []
+
+  #Before files
+  files = files.concat(append_espresso_path(before_files))
+
+  #Entities
+  ent = ((f="entities/"+f) for f in remove_extensions(harvest('entities')))  # unshift ent
+  files = files.concat(ent)   # + ent
+
+  #Levels
+  lvl = ((f="levels/"+f) for f in remove_extensions(harvest('levels')))  # unshift ent
+  files = files.concat(lvl)   # + ent
+
+  #After files
+  files = files.concat(append_espresso_path(after_files))  # insert after files
+
+  return files
+
+# BUILD METHODS
+
+# Build the AppData class
+build_appdata = ->
+  file = espresso_path + "app/AppData.coffee"
+  clear_file(file)
+  put_to_file(file,'class AppData')
+  
+  # add name
+  put_to_file(file,'  @game_name = "' + app_name() + '"')
+
+  # add settings
+  put_to_file(file,'  @width = ' + settings_width )
+  put_to_file(file,'  @height = ' + settings_height )
+  put_to_file(file,'  @scale = ' + settings_scale )
+
+  # add entities
+  put_to_file(file,'  @entities:')
+  list = harvest('entities')
+  list = remove_extensions(list)
+  for f in list
+    put_to_file(file,"   '" + f + "': " + f)
+  
+  # add sprites
+  put_to_file(file,'  @sprites:')
+  list = harvest('sprites')
+  for f in list
+    put_to_file(file,"   '" + remove_extension(f) + "': '" + f + "'")
+
+# Build index.html
+build_index = ->
+  file = "output/index.html"
+  clear_file(file)
+  put_to_file(file,'<head>')
+  put_to_file(file,'  <script type="text/javascript" src="libraries/zepto.js"></script>')
+  put_to_file(file,'  <script type="text/javascript" src="game.js"></script>')
+  put_to_file(file,'  <style>')
+
+  for font in harvest('fonts')
+    put_to_file(file,"    @font-face {font-family: '"+remove_extension(font)+"'; src: url('fonts/"+font+"');}")
+  put_to_file(file,'  </style>')
+
+  # TODO: Softcode google included fonts.. how?
+  put_to_file(file,"  <link href='http://fonts.googleapis.com/css?family=Gochi+Hand' rel='stylesheet' type='text/css'>")
+  put_to_file(file,'  <title>My Game</title>')
+  put_to_file(file,'</head>')
+  put_to_file(file,'<body>')
+  put_to_file(file,'  <div id="game"></div>')
+  put_to_file(file,'</body>')
+  return false
+
+# Build all resources
+build_resources = ->
+  exec 'cp -r fonts output'
+  exec 'cp -r sounds output'
+  exec 'cp -r sprites output'
+  exec 'cp -r libraries output'
+
+# Build game.js
+build_game = ->
+  files = classlist()
+  appContents = new Array remaining = files.length
+  for file, index in files then do (file, index) ->
+    fs.readFile "#{file}.coffee", 'utf8', (err, fileContents) ->
+      throw err if err
+      appContents[index] = fileContents
+      process() if --remaining is 0
+  process = ->
+    fs.writeFile 'output/game.coffee', appContents.join('\n\n'), 'utf8', (err) ->
+      throw err if err
+      exec 'coffee --compile output/game.coffee', (err, stdout, stderr) ->
+        throw err if err
+        if stdout or stderr
+          console.log stdout + stderr
+        fs.unlink 'output/game.coffee', (err) ->
+          throw err if err
+
+#Build all
+build_all = ->
+  build_resources()
+  build_index()
+  build_appdata()
+  build_game()
+
+#TASKS
+task 'build', 'Build single application file from source files', ->
+  build_all()
+  console.log 'Done.'
+
+task 'build_resources', 'Compile all resources', ->
+  build_resources()
+  console.log 'Done.'
+
+task 'build_appdata', 'Compile AppData file', ->
+  build_appdata()
+  console.log 'Done.'
+
+task 'build_game', 'Compile game.js', ->
+  build_game()
+  console.log 'Done.'
+
+task 'build_index', 'Compile index.html', ->
+  build_index()
+  console.log 'Done.'

@@ -1,13 +1,7 @@
 class Hero extends Entity
-
   direction: 0
   move: 'WALKING' #STANDING JUMPING ETC
   animation: 0
-  fireball_sound: null
-
-  init: ->
-    console.log 'hero created'
-    @fireball_sound = new Audio('sounds/dao.wav')
 
   step: ->
     face_x = 0
@@ -87,9 +81,12 @@ class Hero extends Entity
       @x += Math.cos(@direction/180*Math.PI)
       @y -= Math.sin(@direction/180*Math.PI)
 
-    if Keyboard.press('X')
-      @fireball_sound.go()
-      f = World.spawn('Fireball',@x,@y)
-      f.direction = @direction
-
+  draw: ->
+    super
+    Art.font('Gochi Hand')
+    Art.text('Espresso running..',0,0)
+    Art.font('Dosis')
+    Art.text('Espresso running..',0,100)
+    Art.font('Londrina Outline')
+    Art.text('Espresso running..',0,160)
 

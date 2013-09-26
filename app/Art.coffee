@@ -5,8 +5,8 @@ class Art
   @images = {}
   @offset_x = 0
   @offset_y = 0
-  @_font: 'Georgia'
-  @_font_size: 40
+  @_font: 'Dosis'
+  @_font_size: 16 
   @_font_style: "" # "", bold, italic,
   @_scale = 1
   @_alpha = 1

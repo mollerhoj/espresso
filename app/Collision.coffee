@@ -27,3 +27,4 @@ class Collision extends Entity
               return [o1,o2]
       return false
 
+exports.Collision = Collision

@@ -3,5 +3,5 @@ class Level1
   @level:
     1: 
       name: 'Hero'
-      x: 138
+      x: 238
       y: 103

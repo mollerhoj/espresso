@@ -97,6 +97,7 @@ class World
     #Draw background
     Art.color '#EFF8FB'
     Art.rectangleC 0,0,AppData.width * AppData.scale / Art.get_scale(),AppData.height * AppData.scale / Art.get_scale(),true
+    Art.color '#000000'
 
     #Sort for z values. not tested.
     World._entities.sort (a,b) ->

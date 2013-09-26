@@ -65,3 +65,4 @@ class Entity
            Keyboard.MOUSE_Y < @y+@h
         
 
+exports.Entity = Entity
