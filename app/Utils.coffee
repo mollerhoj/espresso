@@ -31,22 +31,22 @@ Array::deepToString = ->
       result += ","
   return result + "]"
 
-Audio.muted = false
-
-Audio::go = () ->
-  if Audio.muted == false
-    this.play()
-
-window.tgl = (p) ->
-  if p
-    return false
-  else
-    return true
-
-window.toggle = (p,t,f) ->
-  if p
-    f()
-    return false
-  else
-    t()
-    return true
+# Audio.muted = false
+# 
+# Audio::go = () ->
+#   if Audio.muted == false
+#     this.play()
+# 
+# window.tgl = (p) ->
+#   if p
+#     return false
+#   else
+#     return true
+# 
+# window.toggle = (p,t,f) ->
+#   if p
+#     f()
+#     return false
+#   else
+#     t()
+#     return true

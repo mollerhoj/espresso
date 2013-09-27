@@ -1,8 +1,8 @@
 # Start the game. This must be loaded after everything else
 
-$ = Zepto
+#$ = Zepto
 
-$ -> 
-  game = new Game
-  game.run()
+#$ -> 
+#  game = new Game
+#  game.run()
 

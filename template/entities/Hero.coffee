@@ -84,7 +84,7 @@ class Hero extends Entity
   draw: ->
     super
     Art.font('Gochi Hand')
-    Art.text('Espresso running..',0,0)
+    Art.text('123',0,0)
     Art.font('Dosis')
     Art.text('Espresso running..',0,100)
     Art.font('Londrina Outline')

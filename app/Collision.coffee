@@ -26,5 +26,3 @@ class Collision extends Entity
              (o1.y+y >= o2.y and o1.y+y < o2.y + o2.h))
               return [o1,o2]
       return false
-
-exports.Collision = Collision

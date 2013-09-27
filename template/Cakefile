@@ -29,6 +29,9 @@ after_files = [
   'app/AppData'
 	'app/SpriteImage'
   'app/start'
+  'app/Test_Framework'
+  'test/Entity_test'
+  'app/Test_Start'
 ]
 
 # HELPER METHODS
@@ -161,16 +164,18 @@ build_game = ->
     fs.readFile "#{file}.coffee", 'utf8', (err, fileContents) ->
       throw err if err
       appContents[index] = fileContents
-      process() if --remaining is 0
-  process = ->
-    fs.writeFile 'output/game.coffee', appContents.join('\n\n'), 'utf8', (err) ->
-      throw err if err
-      exec 'coffee --compile output/game.coffee', (err, stdout, stderr) ->
-        throw err if err
-        if stdout or stderr
-          console.log stdout + stderr
-        fs.unlink 'output/game.coffee', (err) ->
+      if --remaining is 0
+        fs.writeFile 'output/game.coffee', appContents.join('\n\n'), 'utf8', (err) ->
           throw err if err
+
+
+compile_game = ->
+  exec 'coffee --compile output/game.coffee', (err, stdout, stderr) ->
+    throw err if err
+    if stdout or stderr
+      console.log stdout + stderr
+    fs.unlink 'output/game.coffee', (err) ->
+      throw err if err
 
 #Build all
 build_all = ->
@@ -178,6 +183,7 @@ build_all = ->
   build_index()
   build_appdata()
   build_game()
+  compile_game()
 
 #TASKS
 task 'build', 'Build single application file from source files', ->
@@ -199,3 +205,11 @@ task 'build_game', 'Compile game.js', ->
 task 'build_index', 'Compile index.html', ->
   build_index()
   console.log 'Done.'
+
+task 'test', 'Test', ->
+  build_appdata()
+  build_game()
+  exec 'coffee output/game.coffee', (err, stdout, stderr) ->
+    throw err if err
+    if stdout or stderr
+      console.log stdout + stderr
