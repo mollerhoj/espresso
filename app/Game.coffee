@@ -15,8 +15,8 @@ class Game
 
     #Load Art
     Art.init()
-    s = new SpriteLoader (Game.start)
-    s.load_sprites()
+    s = new ImageLoader (Game.start)
+    s.load_images()
 
   @start: ->
     #Create a world

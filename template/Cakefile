@@ -22,7 +22,7 @@ before_files  = [
   'app/Collision'
 	'app/Game'
 	'app/Keyboard'
-	'app/SpriteLoader'
+	'app/ImageLoader'
 	'app/World'
 ]
 
