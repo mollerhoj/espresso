@@ -6,14 +6,8 @@ class World
   @_entities_to_destroy: [] #entites must wait to be destroyed
   @frozen: false
 
-  # When the world is created it adds a canvas to the page and
-  # inserts all the _entities that are needed into the entity array.
-  @init: ->
-    ctx = World.create_canvas()
-    Art.init(ctx,World.art_loaded)
-
   #When all art has been loaded, init can continue
-  @art_loaded: ->
+  constructor: ->
     World.create_level()
     Keyboard.init()
 
@@ -84,16 +78,8 @@ class World
   @exists: (c) ->
     return World.number_of c > 0
 
-  # Create an HTML5 canvas element and append it to the document
-  @create_canvas: ->
-    canvas = document.createElement("canvas")
-    canvas.width = AppData.width * AppData.scale
-    canvas.height = AppData.height * AppData.scale
-    $("#game").append(canvas)
-    return canvas.getContext("2d")
-
   # Draw all the _entities
-  @draw: ->
+  draw: ->
     #Draw background
     Art.color '#EFF8FB'
     Art.rectangleC 0,0,AppData.width * AppData.scale / Art.get_scale(),AppData.height * AppData.scale / Art.get_scale(),true
@@ -110,7 +96,7 @@ class World
       entity.draw()
 
   # Step for all _entities
-  @step:   ->
+  step:   ->
     Keyboard.step()
    
     if World.frozen == false

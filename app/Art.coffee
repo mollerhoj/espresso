@@ -2,7 +2,6 @@
 # The object that draws on the canvas
 # methods that ends with C draws relative to canvas. //Are they useful?
 class Art
-  @images = {}
   @offset_x = 0
   @offset_y = 0
   @_font: 'Dosis'
@@ -10,56 +9,37 @@ class Art
   @_font_style: "" # "", bold, italic,
   @_scale = 1
   @_alpha = 1
-  @_images_loaded = 0
-  @callback = null
   
   # initalize the class
-  @init: (canvas,callback) ->
-    Art.callback = callback
-    Art.canvas = canvas
-    Art.canvas.textBaseline = 'top'
+  @init: ->
+    Game.context.textBaseline = 'top'
     Art.font_update()
-
-    #Load all sprites
-    for key,value of AppData.sprites
-      Art.load(key,"sprites/" + value)
-
     Art.remove_anti_alias()
     Art.scale AppData.scale
 
-  #Is called everytime an SpriteImage has been loaded. When all has been loaded it calls the callback function.
-  @image_loaded: ->
-    Art._images_loaded +=1
-    number_of_images = Object.keys(AppData.sprites).length
-    if Art._images_loaded == number_of_images
-      Art.callback() #Makes the init of the game continue after all images are loaded
-
   #Make zooming look pretty
   @remove_anti_alias: ->
-    Art.canvas.imageSmoothingEnabled = false # Spec
-    Art.canvas.mozImageSmoothingEnabled = false # Mozilla
-    Art.canvas.webkitImageSmoothingEnabled = false # Chrome / Safari
+    Game.context.imageSmoothingEnabled = false # Spec
+    Game.context.mozImageSmoothingEnabled = false # Mozilla
+    Game.context.webkitImageSmoothingEnabled = false # Chrome / Safari
 
   @get_scale: ->
     return @_scale
 
   @scale: (rate) ->
-    Art.canvas.scale(rate/Art._scale,rate/Art._scale)
+    Game.context.scale(rate/Art._scale,rate/Art._scale)
     Art._scale = rate
 
-  @load: (name,file) ->
-    Art.images[name] = new SpriteImage(file)
-
   @image_exists: (name) ->
-    return Art.images[name] != null
+    return SpriteLoader.images[name] != null
 
   @_image: (name,index = 1) ->
     if index != 1
       name = name + index
-    result = Art.images[name]
+    result = SpriteLoader.images[name]
     if not result
       console.log name
-      result = Art.images['PlaceHolder']
+      result = SpriteLoader.images['PlaceHolder']
     return result
 
   @entity: (e) ->
@@ -70,14 +50,14 @@ class Art
     y = e.y + offset_y - e.offset_y
     i = Art._image(e.sprite,e.index)
     if e.rotation == 0 and e.scale_x == 1 and e.scale_y == 1
-      Art.canvas.drawImage(i.image,0,0,i.w,i.h,x,y,i.w,i.h)
+      Game.context.drawImage(i,0,0,i.width,i.height,x,y,i.width,i.height)
     else
-      Art.canvas.save()
-      Art.canvas.translate(x+i.w/2,y+i.h/2)
-      Art.canvas.scale(e.scale_x,e.scale_y)
-      Art.canvas.rotate(Math.PI/180*e.rotation)
-      Art.canvas.drawImage(i.image,0,0,i.w,i.h,-i.w/2,-i.h/2,i.w,i.h)
-      Art.canvas.restore()
+      Game.context.save()
+      Game.context.translate(x+i.width/2,y+i.height/2)
+      Game.context.scale(e.scale_x,e.scale_y)
+      Game.context.rotate(Math.PI/180*e.rotation)
+      Game.context.drawImage(i,0,0,i.width,i.height,-i.width/2,-i.height/2,i.width,i.height)
+      Game.context.restore()
 
   @sprite_width: (name) ->
     Art._image(name).w
@@ -93,23 +73,23 @@ class Art
 
   @alpha: (alpha) ->
     Art._alpha = alpha
-    Art.canvas.globalAlpha = alpha
+    Game.context.globalAlpha = alpha
 
   @lineC: (x,y,x2,y2) ->
-    Art.canvas.beginPath()
-    Art.canvas.moveTo(x+0.5,y+0.5)
-    Art.canvas.lineTo(x2+0.5,y2+0.5)
-    Art.canvas.stroke()
+    Game.context.beginPath()
+    Game.context.moveTo(x+0.5,y+0.5)
+    Game.context.lineTo(x2+0.5,y2+0.5)
+    Game.context.stroke()
 
   @color: (color) ->
-    Art.canvas.fillStyle = color
-    Art.canvas.strokeStyle = color
+    Game.context.fillStyle = color
+    Game.context.strokeStyle = color
 
   @fill_color: (color) ->
-    Art.canvas.fillStyle = color
+    Game.context.fillStyle = color
 
   @stroke_color: (color) ->
-    Art.canvas.strokeStyle = color
+    Game.context.strokeStyle = color
 
   @font: (font) ->
     Art._font = font
@@ -124,24 +104,24 @@ class Art
     Art.font_update()
 
   @font_update: ->
-    Art.canvas.font = Art._font_style + " " + Art._font_size + " " + Art._font
+    Game.context.font = Art._font_style + " " + Art._font_size + " " + Art._font
 
   @text: (string,x,y,rotation = 0) ->
     Art.textC(string,x+Art.offset_x,y+Art.offset_y,rotation)
 
   @textC: (string,x,y,rotation = 0) ->
     if rotation != 0
-        Art.canvas.save()
-        Art.canvas.translate(x+Art.text_width(string)/2,y+Art.font_size/2)
-        Art.canvas.rotate(Math.PI/180*rotation)
-        Art.canvas.fillText(string,-Art.text_width(string)/2,-Art.font_size/2)
-        Art.canvas.restore()
+        Game.context.save()
+        Game.context.translate(x+Art.text_width(string)/2,y+Art.font_size/2)
+        Game.context.rotate(Math.PI/180*rotation)
+        Game.context.fillText(string,-Art.text_width(string)/2,-Art.font_size/2)
+        Game.context.restore()
     else
-        Art.canvas.fillText(string, x, y)
+        Game.context.fillText(string, x, y)
 
   @text_width: (string) ->
     Art.font_update()
-    return Art.canvas.measureText(string).width
+    return Game.context.measureText(string).width
 
   @text_height: (string) ->
     Art.font_update()
@@ -149,9 +129,9 @@ class Art
 
   @rectangleC: (x,y,w,h,filled = false) ->
     if filled == true
-      Art.canvas.fillRect(x,y,w,h)
+      Game.context.fillRect(x,y,w,h)
     else
-      Art.canvas.strokeRect(x,y,w,h)
+      Game.context.strokeRect(x,y,w,h)
 
   @rectangle: (x,y,w,h,filled = false) ->
     Art.rectangleC(x+Art.offset_x,y+Art.offset_y,w,h,filled)

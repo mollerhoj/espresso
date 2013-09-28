@@ -22,13 +22,17 @@ before_files  = [
   'app/Collision'
 	'app/Game'
 	'app/Keyboard'
+	'app/SpriteLoader'
 	'app/World'
 ]
 
 after_files = [
   'app/AppData'
-	'app/SpriteImage'
+	'app/Sprite'
   'app/start'
+]
+
+test_files = [
   'app/Test_Framework'
   'test/Entity_test'
   'app/Test_Start'

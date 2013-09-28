@@ -1,11 +1,38 @@
 # ## Game
 # The game class handles top level game loop and initialisation.
 class Game
+  @context = null
+  @worlds = []
+  @_images_loaded = 0
 
-  run: =>
-    World.init()
-    setInterval(@main, 16)
+  @add_world: ->
+    Game.world = new World(Game.context)
+    Game.worlds.push(Game.world)
 
-  main: =>
-    World.step()
-    World.draw()
+  @init: ->
+    #Create canvas:
+    Game.context = Game.create_canvas()
+
+    #Load Art
+    Art.init()
+    s = new SpriteLoader (Game.start)
+    s.load_sprites()
+
+  @start: ->
+    #Create a world
+    Game.add_world()
+    #Start running
+    setInterval(Game.run, 16)
+
+  # To own load images class
+  @create_canvas: ->
+    canvas = document.createElement("canvas")
+    canvas.width = AppData.width * AppData.scale
+    canvas.height = AppData.height * AppData.scale
+    $("#game").append(canvas)
+    return canvas.getContext("2d")
+
+  @run: =>
+    for world in Game.worlds
+      world.step()
+      world.draw()
