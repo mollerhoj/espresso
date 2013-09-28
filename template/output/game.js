@@ -172,7 +172,7 @@
     };
 
     Art.image_exists = function(name) {
-      return ImageLoader.images[name] !== null;
+      return Game.images[name] !== null;
     };
 
     Art._image = function(name, index) {
@@ -183,10 +183,10 @@
       if (index !== 1) {
         name = name + index;
       }
-      result = ImageLoader.images[name];
+      result = Game.images[name];
       if (!result) {
         console.log(name);
-        result = ImageLoader.images['PlaceHolder'];
+        result = Game.images['PlaceHolder'];
       }
       return result;
     };
@@ -383,19 +383,19 @@
 
     Game.worlds = [];
 
-    Game._images_loaded = 0;
+    Game.images = {};
 
     Game.add_world = function() {
-      Game.world = new World(Game.context);
-      return Game.worlds.push(Game.world);
+      return Game.worlds.push(new World);
     };
 
     Game.init = function() {
-      var s;
+      var i;
       Game.context = Game.create_canvas();
       Art.init();
-      s = new ImageLoader(Game.start);
-      return s.load_images();
+      i = new ImageLoader();
+      i.onload = Game.start;
+      return i.load_images();
     };
 
     Game.start = function() {
@@ -596,22 +596,20 @@
 
     onload = null;
 
-    ImageLoader.images = {};
-
-    function ImageLoader(onload) {
+    function ImageLoader() {
       this.image_loaded = __bind(this.image_loaded, this);
-      this.onload = onload;
       images_n = Object.keys(AppData.sprites).length;
     }
 
     ImageLoader.prototype.load_images = function() {
       var file, image, name, _ref1, _results;
-      _ref1 = AppData.images;
+      _ref1 = AppData.sprites;
       _results = [];
       for (name in _ref1) {
         file = _ref1[name];
         image = this.load_image("sprites/" + file, this.image_loaded);
-        _results.push(ImageLoader.images[name] = image);
+        Game.images[name] = image;
+        _results.push(console.log(Game.images));
       }
       return _results;
     };
@@ -956,21 +954,10 @@
   })();
 
   Sprite = (function() {
-    function Sprite(url, onload) {
-      var image,
-        _this = this;
-      image = new Image;
-      image.src = url;
-      image.onload = function() {
-        return _this.loaded(onload);
-      };
-      this.image = image;
-    }
+    function Sprite() {}
 
-    Sprite.prototype.loaded = function(onload) {
-      this.h = this.image.height;
-      this.w = this.image.width;
-      return onload();
+    Sprite.prototype.draw = function() {
+      return console.log('draw');
     };
 
     return Sprite;

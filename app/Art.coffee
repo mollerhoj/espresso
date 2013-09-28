@@ -31,15 +31,15 @@ class Art
     Art._scale = rate
 
   @image_exists: (name) ->
-    return ImageLoader.images[name] != null
+    return Game.images[name] != null
 
   @_image: (name,index = 1) ->
     if index != 1
       name = name + index
-    result = ImageLoader.images[name]
+    result = Game.images[name]
     if not result
       console.log name
-      result = ImageLoader.images['PlaceHolder']
+      result = Game.images['PlaceHolder']
     return result
 
   @entity: (e) ->

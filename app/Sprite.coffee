@@ -1,13 +1,7 @@
 class Sprite
 
-  constructor: (url,onload) ->
-    image = new Image
-    image.src = url
-    image.onload = => @loaded(onload)
-    @image = image
+  constructor: ->
 
-  loaded:(onload) ->
-    @h = @image.height
-    @w = @image.width
-    onload()
+  draw: ->
+    console.log 'draw'
 

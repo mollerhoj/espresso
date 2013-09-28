@@ -2,16 +2,14 @@ class ImageLoader
   images_loaded = 0
   images_n = 0
   onload = null
-  @images = {}
 
-  constructor: (onload) ->
-    @onload = onload
+  constructor: ->
     images_n = Object.keys(AppData.sprites).length
 
   load_images: ->
-    for name,file of AppData.images
+    for name,file of AppData.sprites
       image = @load_image("sprites/" + file,@image_loaded)
-      ImageLoader.images[name] = image 
+      Game.images[name] = image 
 
   load_image: (url,onload) ->
     image = new Image

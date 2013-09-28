@@ -3,11 +3,10 @@
 class Game
   @context = null
   @worlds = []
-  @_images_loaded = 0
+  @images = {}
 
   @add_world: ->
-    Game.world = new World(Game.context)
-    Game.worlds.push(Game.world)
+    Game.worlds.push(new World)
 
   @init: ->
     #Create canvas:
@@ -15,8 +14,9 @@ class Game
 
     #Load Art
     Art.init()
-    s = new ImageLoader (Game.start)
-    s.load_images()
+    i = new ImageLoader()
+    i.onload = Game.start
+    i.load_images()
 
   @start: ->
     #Create a world
