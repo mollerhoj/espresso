@@ -6,6 +6,7 @@ class Game
   @images = {}
   @zoom_level: 1
   @pause = false
+  @editor = null
 
   @add_world: ->
     Game.worlds.push(new World)
@@ -19,33 +20,16 @@ class Game
 
     Game.setup_keyboard()
 
-    Game.setup_editor()
     #Load Art
     i = new ImageLoader()
     i.onload = Game.start
     i.load_images()
     
-  @setup_editor: ->
-    b = $("#btn").click(Game.toggle_pause)
-
-  @toggle_pause: ->
-    b = $("#btn")
-    if Game.pause
-      Game.pause = false
-      b.html('Pause')
-    else
-      Game.pause = true
-      b.html('Play')
-
-    for world in Game.worlds
-      world.pause = Game.pause
-      console.log world.pause
-
-
-
   @start: ->
     #Create a world
     Game.add_world()
+
+    Game.editor = new Editor
     #Start running
     setInterval(Game.run, 16)
 
@@ -80,3 +64,6 @@ class Game
     for world in Game.worlds
       world.step()
       world.draw()
+
+    if Game.editor
+      Game.editor.draw()

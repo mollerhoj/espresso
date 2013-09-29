@@ -65,11 +65,13 @@ add_folder = (files,folder) ->
   files = files.concat(ent)   # + ent
 
 # Get the list of classes to be loaded in the right order
-classlist = ->
+classlist= (mode)->
   files = []
   files = add_folder(files,espresso_path + 'app/control/')
   files = add_folder(files,'entities')
   files = add_folder(files,'levels')
+  if mode = 'Development'
+    files = add_folder(files,espresso_path + 'app/development')
   files.push(espresso_path + 'app/starters/Prod_Start')
   files.push('AppData')
   return files
@@ -134,7 +136,7 @@ build_resources = ->
 
 # Build game.js
 build_game = ->
-  files = classlist()
+  files = classlist('Development')
   appContents = new Array remaining = files.length
   for file, index in files then do (file, index) ->
     fs.readFile "#{file}.coffee", 'utf8', (err, fileContents) ->
