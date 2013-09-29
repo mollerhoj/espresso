@@ -29,6 +29,7 @@ before_files  = [
 after_files = [
   'app/AppData'
 	'app/Sprite'
+	'app/Text'
   'app/start'
 ]
 

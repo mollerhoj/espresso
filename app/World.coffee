@@ -4,12 +4,11 @@
 class World
   @_entities: []
   @_entities_to_destroy: [] #entites must wait to be destroyed
-  @frozen: false
+  @pause: false
 
   #When all art has been loaded, init can continue
   constructor: ->
     World.create_level()
-    Keyboard.init()
 
   # create level
   @create_level: () ->
@@ -49,25 +48,25 @@ class World
   # Spawn new
   @spawn: (name,x = 0,y = 0) ->
     entity = new AppData.entities[name]
+    entity.sx = x
+    entity.sy = y
+
     if entity.name == null
       entity.name = name
     
     if entity.sprite == null
-      if Art.image_exists(name)
-        entity.sprite = name
+      entity.sprite = new Sprite
+      if Game.images[name] != null
+        entity.sprite.name = name
+        entity.w = Game.images[name].width
+        entity.h = Game.images[name].height
       else
-        entity.sprite = 'PlaceHolder' #TODO: this cant be right..
-    
-    entity.sx = x
-    entity.sy = y
+        entity.sprite.name = 'PlaceHolder' 
 
-    if entity.w == undefined and entity.sprite != null
-      entity.w = Art.sprite_width(entity.sprite)
-    if entity.h == undefined and entity.sprite != null
-      entity.h = Art.sprite_height(entity.sprite)
     World._entities.push (entity)
     entity.reset()
     entity.init()
+    console.log entity.sprite
     return entity
 
   # Find the number of instances of a class
@@ -99,7 +98,7 @@ class World
   step:   ->
     Keyboard.step()
    
-    if World.frozen == false
+    if World.pause == false
       for entity in World._entities
         if typeof entity.step is "function"
           entity.step()

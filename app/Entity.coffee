@@ -20,7 +20,10 @@ class Entity
   z: 0
 
   draw: ->
-    Art.entity(this)
+    if @sprite
+      @sprite.x = @x
+      @sprite.y = @y
+      @sprite.draw()
 
   init: ->
     return null

@@ -68,18 +68,8 @@ class Keyboard
   @_released: []
   @_hold: []
 
-# Listen for keys being presses and being released. As this happens
+  # Listen for keys being presses and being released. As this happens
   # add and remove them from the key store.
-  @init: ->
-    $("body").keydown (e) =>
-      Keyboard.key_pressed(e.keyCode)
-    $("body").keyup (e) =>
-      Keyboard.key_released(e.keyCode)
-    $("#game").mousemove(Keyboard.mouse_move)
-    $("#game").mousedown(Keyboard.mouse_down)
-    $("#game").mouseup(Keyboard.mouse_up)
-    $("#game").bind "contextmenu", (e) -> return false # remove contextmenu
-
   @key_released: (c) ->
     Keyboard._pre_released.push c
 
