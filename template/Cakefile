@@ -13,30 +13,10 @@ settings_height= 240
 settings_scale= 2
 settings_background= 'Background'
 
-#Espresso files
-#TODO: Make sense of why some must be before/after
-before_files  = [
-  'app/Utils'
-	'app/Entity'
-  'app/Art'
-  'app/Collision'
-	'app/Game'
-	'app/Keyboard'
-	'app/ImageLoader'
-	'app/World'
-]
-
-after_files = [
-  'app/AppData'
-	'app/Sprite'
-	'app/Text'
-  'app/start'
-]
-
 test_files = [
-  'app/Test_Framework'
+  'Test_Framework'
   'test/Entity_test'
-  'app/Test_Start'
+  'app/starters/Test_Start'
 ]
 
 # HELPER METHODS
@@ -75,39 +55,30 @@ put_to_file = (file,put) ->
   fs.appendFileSync file, put + newline,'utf8', (err) ->
     throw err if err
 
-# Append espresso path to files in array
-append_espresso_path = (files) ->
-  ((file=espresso_path + file) for file in files) 
-
 # Get name of the app
 app_name = ->
   return path.basename(__dirname)
 
+#add a folder
+add_folder = (files,folder) ->
+  ent = ((f=folder+"/"+f) for f in remove_extensions(harvest(folder)))
+  files = files.concat(ent)   # + ent
+
 # Get the list of classes to be loaded in the right order
 classlist = ->
   files = []
-
-  #Before files
-  files = files.concat(append_espresso_path(before_files))
-
-  #Entities
-  ent = ((f="entities/"+f) for f in remove_extensions(harvest('entities')))  # unshift ent
-  files = files.concat(ent)   # + ent
-
-  #Levels
-  lvl = ((f="levels/"+f) for f in remove_extensions(harvest('levels')))  # unshift ent
-  files = files.concat(lvl)   # + ent
-
-  #After files
-  files = files.concat(append_espresso_path(after_files))  # insert after files
-
+  files = add_folder(files,espresso_path + 'app/control/')
+  files = add_folder(files,'entities')
+  files = add_folder(files,'levels')
+  files.push(espresso_path + 'app/starters/Prod_Start')
+  files.push('AppData')
   return files
 
 # BUILD METHODS
 
 # Build the AppData class
 build_appdata = ->
-  file = espresso_path + "app/AppData.coffee"
+  file = "AppData.coffee"
   clear_file(file)
   put_to_file(file,'class AppData')
   
@@ -185,8 +156,8 @@ compile_game = ->
 #Build all
 build_all = ->
   build_resources()
-  build_index()
   build_appdata()
+  #build_index()
   build_game()
   compile_game()
 
