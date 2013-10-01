@@ -1,17 +1,10 @@
+espresso_path = '/Users/mem/work/coffee/espresso/'
+
 #Requirements
 {spawn, exec} = require 'child_process'
 fs     = require 'fs'
 path = require 'path'
-
-#Global vars
-espresso_path = '/Users/mem/work/coffee/espresso/'
-
-#Global settings
-#TODO: Move to seperate file
-settings_width= 320
-settings_height= 240
-settings_scale= 2
-settings_background= 'Background'
+require './settings'
 
 test_files = [
   'Test_Framework'
@@ -20,7 +13,6 @@ test_files = [
 ]
 
 # HELPER METHODS
-
 # Get all resources from a folder
 harvest = (resource) ->
   dir = fs.readdirSync(resource)
@@ -50,9 +42,8 @@ clear_file = (file) ->
   fs.writeFileSync file, '','utf8', (err) -> throw err if err
 
 #Put to a file
-newline = "\n"
 put_to_file = (file,put) ->
-  fs.appendFileSync file, put + newline,'utf8', (err) ->
+  fs.appendFileSync file, put + "\n",'utf8', (err) ->
     throw err if err
 
 # Get name of the app
@@ -74,6 +65,7 @@ classlist= (mode)->
     files = add_folder(files,espresso_path + 'app/development')
   files.push(espresso_path + 'app/starters/Prod_Start')
   files.push('AppData')
+  files.push('EditorState')
   return files
 
 # BUILD METHODS
@@ -109,23 +101,60 @@ build_appdata = ->
 build_index = ->
   file = "output/index.html"
   clear_file(file)
-  put_to_file(file,'<head>')
-  put_to_file(file,'  <script type="text/javascript" src="libraries/zepto.js"></script>')
-  put_to_file(file,'  <script type="text/javascript" src="game.js"></script>')
-  put_to_file(file,'  <style>')
-
-  for font in harvest('fonts')
-    put_to_file(file,"    @font-face {font-family: '"+remove_extension(font)+"'; src: url('fonts/"+font+"');}")
-  put_to_file(file,'  </style>')
-
-  # TODO: Softcode google included fonts.. how?
-  put_to_file(file,"  <link href='http://fonts.googleapis.com/css?family=Gochi+Hand' rel='stylesheet' type='text/css'>")
-  put_to_file(file,'  <title>My Game</title>')
-  put_to_file(file,'</head>')
-  put_to_file(file,'<body>')
-  put_to_file(file,'  <div id="game"></div>')
-  put_to_file(file,'</body>')
+  put_to_file(file,"
+<head>\n
+  <script type='text/javascript' src='libraries/zepto.js'></script>\n
+  <script type='text/javascript' src='game.js'></script>\n
+  <style>\n
+#{write_fonts()}
+  </style>\n
+  <link href='http://fonts.googleapis.com/css?family=Gochi+Hand' rel='stylesheet' type='text/css'>\n
+  <title>My Game</title>\n
+</head>\n
+<body>\n
+  <div id='game'></div>\n
+#{write_development_tools()}\n
+</body>")
   return false
+
+write_fonts = ->
+  str = ''
+  for font in harvest('fonts')
+    str+= "    @font-face {font-family: '"+remove_extension(font)+"'; src: url('fonts/"+font+"');}\n"
+  return str
+
+write_development_tools = ->
+  str = "
+  <button type='button' id='pause_toggle'>Pause</button>\n
+  <select id='entity_selector'>\n
+#{write_development_entities()}
+  </select>\n
+  </br>\n
+  <button type='button' id='grid_toggle'>Grid on</button>\n
+  <span>x:</span>\n
+  <input id='grid_x'type='Number' value='0'></input>\n
+  <span>y:</span>\n
+  <input id='grid_y'type='Number' value='0'></input>\n
+  <span>width:</span>\n
+  <input id='grid_width' type='Number' value='16'></input>\n
+  <span>height:</span>\n
+  <input id='grid_height' type='Number' value='16'></input>
+  </br>\n
+  <textarea cols='70' rows='0' id='printer_output'></textarea>\n
+  <select id='print_type_selector'>\n
+    <option value='Flow'>Flow</option>\n
+    <option value='Grid'>Grid</option>\n
+    <option value='Vector'>Vector</option>\n
+  </select>\n
+  <button type='button' id='print_button'>Print</button>"
+  return str
+
+write_development_entities = ->
+  str = ''
+  for entity in harvest('entities')
+    str+= "    <option value='#{remove_extension(entity)}'>#{remove_extension(entity)}</option>\n"
+  return str
+
 
 # Build all resources
 build_resources = ->
@@ -159,7 +188,7 @@ compile_game = ->
 build_all = ->
   build_resources()
   build_appdata()
-  #build_index()
+  build_index()
   build_game()
   compile_game()
 

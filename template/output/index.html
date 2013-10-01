@@ -1,6 +1,6 @@
 <head>
-  <script type="text/javascript" src="libraries/zepto.js"></script>
-  <script type="text/javascript" src="game.js"></script>
+  <script type='text/javascript' src='libraries/zepto.js'></script>
+  <script type='text/javascript' src='game.js'></script>
   <style>
     @font-face {font-family: 'Dosis'; src: url('fonts/Dosis.ttf');}
     @font-face {font-family: 'Londrina Outline'; src: url('fonts/Londrina Outline.ttf');}
@@ -9,21 +9,27 @@
   <title>My Game</title>
 </head>
 <body>
-  <div id="game"></div>
-  <button type="button" id="pause_toggle">Pause</button>
-  <select>
+  <div id='game'></div>
+  <button type='button' id='pause_toggle'>Pause</button>
+  <select id='entity_selector'>
     <option value='Hero'>Hero</option>
     <option value='Skull'>Skull</option>
   </select>
-  
   </br>
-  <button type="button" id="grid_toggle">Grid on</button>
+  <button type='button' id='grid_toggle'>Grid on</button>
   <span>x:</span>
-  <input id="grid_x"type='Number' value='0'></input>
+  <input id='grid_x'type='Number' value='0'></input>
   <span>y:</span>
-  <input id="grid_y"type='Number' value='0'></input>
+  <input id='grid_y'type='Number' value='0'></input>
   <span>width:</span>
-  <input id="grid_width" type='Number' value='16'></input>
+  <input id='grid_width' type='Number' value='16'></input>
   <span>height:</span>
-  <input id="grid_height" type='Number' value='16'></input>
+  <input id='grid_height' type='Number' value='16'></input>  </br>
+  <textarea cols='70' rows='0' id='printer_output'></textarea>
+  <select id='print_type_selector'>
+    <option value='Flow'>Flow</option>
+    <option value='Grid'>Grid</option>
+    <option value='Vector'>Vector</option>
+  </select>
+  <button type='button' id='print_button'>Print</button>
 </body>

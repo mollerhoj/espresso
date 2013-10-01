@@ -5,6 +5,7 @@ class AppData
   @scale = 2
   @entities:
    'Hero': Hero
+   'Skull': Skull
   @sprites:
    'Hero': 'Hero.png'
    'Hero10': 'Hero10.png'

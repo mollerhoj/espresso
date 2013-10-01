@@ -1,0 +1,1 @@
+class Skull extends Entity
