@@ -127,7 +127,10 @@ write_development_tools = ->
   str = "
   <button type='button' id='pause_toggle'>Pause</button>\n
   <select id='entity_selector'>\n
-#{write_development_entities()}
+#{write_development_selector('entities')}
+  </select>\n
+  <select id='level_selector'>\n
+#{write_development_selector('levels')}
   </select>\n
   </br>\n
   <button type='button' id='grid_toggle'>Grid on</button>\n
@@ -149,12 +152,11 @@ write_development_tools = ->
   <button type='button' id='print_button'>Print</button>"
   return str
 
-write_development_entities = ->
+write_development_selector= (resource) ->
   str = ''
-  for entity in harvest('entities')
-    str+= "    <option value='#{remove_extension(entity)}'>#{remove_extension(entity)}</option>\n"
+  for res in harvest(resource)
+    str+= "    <option value='#{remove_extension(res)}'>#{remove_extension(res)}</option>\n"
   return str
-
 
 # Build all resources
 build_resources = ->
