@@ -50,6 +50,7 @@ class World
   # Spawn new
   spawn: (name,x = 0,y = 0) ->
     entity = new AppData.entities[name]
+    entity.world = this
     entity.sx = x
     entity.sy = y
 
@@ -68,7 +69,6 @@ class World
     @_entities.push (entity)
     entity.reset()
     entity.init()
-    console.log entity.sprite
     return entity
 
   # Find the number of instances of a class

@@ -17,6 +17,7 @@ class Entity
   rotation: 0
   index: 1
   sprite: null 
+  world: null
   z: 0
 
   draw: ->
@@ -37,7 +38,7 @@ class Entity
     return result[1]
 
   destroy: ->
-    World.destroy this
+    @world.destroy this
 
   reset: ->
     @x = @sx
@@ -45,7 +46,7 @@ class Entity
 
   # TODO. This should be moved to the collsion object.
   mouse_hits: ->
-    return Keyboard.MOUSE_X > @x and
-           Keyboard.MOUSE_X < @x+@w and
-           Keyboard.MOUSE_Y > @y and
-           Keyboard.MOUSE_Y < @y+@h
+    return Keyboard.MOUSE_X > @x-@w/2 and
+           Keyboard.MOUSE_X < @x+@w/2 and
+           Keyboard.MOUSE_Y > @y-@h/2 and
+           Keyboard.MOUSE_Y < @y+@h/2

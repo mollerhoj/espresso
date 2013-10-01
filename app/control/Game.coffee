@@ -66,4 +66,5 @@ class Game
       world.draw()
 
     if Game.editor
+      Game.editor.step()
       Game.editor.draw()

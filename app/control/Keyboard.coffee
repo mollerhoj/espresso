@@ -91,8 +91,8 @@ class Keyboard
     return false #to disable default drag in canvas
 
   @mouse_move: (e) ->
-    Keyboard.MOUSE_XC = e.offsetX / Art.get_scale()
-    Keyboard.MOUSE_YC = e.offsetY / Art.get_scale()
+    Keyboard.MOUSE_XC = e.offsetX / Game.zoom_level
+    Keyboard.MOUSE_YC = e.offsetY / Game.zoom_level
     Keyboard.MOUSE_X = (Keyboard.MOUSE_XC - Art.offset_x)
     Keyboard.MOUSE_Y = (Keyboard.MOUSE_YC - Art.offset_y)
 

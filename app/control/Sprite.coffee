@@ -11,9 +11,9 @@ class Sprite
   name: null
 
   draw: ->
-    x = @x + Art.offset_x
-    y = @y + Art.offset_y
     image = @_get_image()
+    x = @x - image.width/2 + Art.offset_x
+    y = @y - image.height/2 + Art.offset_y
     if @rotation == 0 and @scale_x == 1 and @scale_y == 1
       Game.context.drawImage(image,0,0,image.width,image.height,x,y,image.width,image.height)
     else

@@ -1,6 +1,12 @@
 class Editor
   grid: null
+  builder: null
+  printer: null
+
+  entity_selector: null
+
   pause_button: null
+
   grid_x_button: null
   grid_y_button: null
   grid_width_button: null
@@ -8,8 +14,23 @@ class Editor
   grid_toggle_button: null
 
   constructor: ->
+    @printer = new LevelPrinter
+
+    @print_output = $('#printer_output')
+    @print_type_selector = $("#print_type_selector")
+    @print_type_selector.change(@print_type_change)
+    @print_button = $("#print_button")
+    @print_button.click(@print)
+
+    @builder = new Builder
+
+    @entity_selector = $("#entity_selector")
+    @entity_selector.change(@entity_change)
+    @entity_change()
+
     @pause_button = $("#pause_toggle")
     @pause_button.click(@toggle_pause)
+    @pause_button.click(@entity_change)
 
     @grid = new Grid
     @grid_x_button = $("#grid_x")
@@ -24,6 +45,18 @@ class Editor
     @grid_height_button.change(@grid_move)
     @grid_toggle_button.click(@toggle_grid)
 
+  step: ->
+    @builder.step()
+
+  print_type_change: =>
+    @printer.type = @print_type_selector.val()
+
+  print: =>
+    @print_output.html(@printer.print())
+
+  entity_change: =>
+    @builder.entity = @entity_selector.val()
+    
   grid_move: =>
     @grid.x = $("#grid_x").val()
     @grid.y = $("#grid_y").val()
@@ -48,7 +81,6 @@ class Editor
 
     for world in Game.worlds
       world.pause = Game.pause
-      console.log world.pause
 
   draw: ->
     @grid.draw()
