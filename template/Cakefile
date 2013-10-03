@@ -1,4 +1,4 @@
-espresso_path = '/Users/mem/work/coffee/espresso/'
+espresso_path = '/Users/mollerhoj3/work/coffee/espresso/'
 
 #Requirements
 {spawn, exec} = require 'child_process'
@@ -65,7 +65,6 @@ classlist= (mode)->
     files = add_folder(files,espresso_path + 'app/development')
   files.push(espresso_path + 'app/starters/Prod_Start')
   files.push('AppData')
-  files.push('EditorState')
   return files
 
 # BUILD METHODS

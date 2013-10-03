@@ -1,5 +1,5 @@
 class Level2
-  data:
+  @data:
     1: 
       name: 'Skull'
       x: 200

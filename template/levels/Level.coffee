@@ -1,5 +1,5 @@
 class Level
-  data:
+  @data:
     1: 
       name: 'Hero'
       x: 238

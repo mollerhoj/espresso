@@ -22,9 +22,10 @@ class LevelPrinter
 
   print: ->
     txt = ''
-    n = Object.keys(EditorState.level).length
+    level = AppData.levels[name]
+    n = Object.keys(level.data).length
     for i in [1..n]
-      e = EditorState.level[i]
+      e = level.data[i]
       txt += "    " + i + ":" + @newline
       txt += "      name: '" + e.name + "'" + @newline
       txt += '      x: ' + e.x + @newline

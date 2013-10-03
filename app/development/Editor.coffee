@@ -59,7 +59,7 @@ class Editor
   level_change: =>
     @level = @level_selector.val()
     @world.destroy_all()
-    @builder.load_level(@level)
+    @world.load_level(@level)
 
   print_type_change: =>
     @printer.type = @print_type_selector.val()

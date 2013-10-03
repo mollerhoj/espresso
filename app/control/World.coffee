@@ -10,8 +10,8 @@ class World
 
   # create level
   load_level: (name) ->
-    lvl = new AppData.levels[name]
-    for key,value of lvl.data
+    level = AppData.levels[name]
+    for key,value of level.data
       @spawn(value.name,value.x,value.y)
 
   # destroy all
