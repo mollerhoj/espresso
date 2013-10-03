@@ -4,21 +4,32 @@ class Builder
   entity: null
   world: null
   grid: null
+  editor_state: null
+  editor: null
 
-  constructor: ->
+  constructor:(editor) ->
+    @editor = editor
+    @editor_state = new EditorState
     #Ugly but don't know how else:
     @world = Game.worlds[0]
 
-  save: ->
+  save_level:(name) ->
     i = 1
-    EditorState.level = new Object()
+    console.log @editor_state
+    console.log @editor_state.data
+    lvl = @editor_state.data[name] = new Object()
     for e in @world.all_entities()
       o = new Object()
       o.name = e.name
       o.x = e.sx
       o.y = e.sy
-      EditorState.level[i] = o
+      lvl[i] = o
       i += 1
+
+  load_level:(name) ->
+    lvl = @editor_state
+    for key,value of lvl.data[name]
+      @world.spawn(value.name,value.x,value.y)
 
   step: ->
     #Ugly but don't know how else:
@@ -40,7 +51,7 @@ class Builder
       @hold.sy = @hold.y
 
     if Keyboard.release('MOUSE_LEFT')
-      @save()
+      @save_level(@editor.level)
       @hold = null
 
     # Destroy objects
@@ -48,4 +59,4 @@ class Builder
       temp_all_entities = @world.all_entities().slice(0)
       for e in temp_all_entities when e.mouse_hits()
         e.destroy()
-      @save()
+      @save_level(@editor.level)

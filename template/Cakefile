@@ -74,29 +74,33 @@ classlist= (mode)->
 build_appdata = ->
   file = "AppData.coffee"
   clear_file(file)
-  put_to_file(file,'class AppData')
-  
-  # add name
-  put_to_file(file,'  @game_name = "' + app_name() + '"')
+  put_to_file(file,"
+class AppData\n
+  @game_name = \"#{app_name()}\"\n
+  @width = #{settings_width}\n
+  @height = #{settings_height}\n
+  @scale = #{settings_scale}\n
+  @entities:\n
+#{write_appdata_res('entities')}
+  @sprites:\n
+#{write_appdata_sprites()}
+  @levels:\n
+#{write_appdata_res('levels')}
+")
 
-  # add settings
-  put_to_file(file,'  @width = ' + settings_width )
-  put_to_file(file,'  @height = ' + settings_height )
-  put_to_file(file,'  @scale = ' + settings_scale )
+write_appdata_sprites = ->
+  l = harvest('sprites')
+  str = ""
+  for f in l
+    str+="   '" + remove_extension(f) + "': '" + f + "'\n"
+  return str
 
-  # add entities
-  put_to_file(file,'  @entities:')
-  list = harvest('entities')
-  list = remove_extensions(list)
-  for f in list
-    put_to_file(file,"   '" + f + "': " + f)
-  
-  # add sprites
-  put_to_file(file,'  @sprites:')
-  list = harvest('sprites')
-  for f in list
-    put_to_file(file,"   '" + remove_extension(f) + "': '" + f + "'")
-
+write_appdata_res =(res) ->
+  l = harvest(res)
+  str = ""
+  for f in l
+    str+="   '" + remove_extension(f) + "': " + remove_extension(f) + "\n"
+  return str
 # Build index.html
 build_index = ->
   file = "output/index.html"

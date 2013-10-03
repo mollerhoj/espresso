@@ -29,7 +29,7 @@ class Game
     #Create a world
     Game.add_world()
 
-    Game.editor = new Editor
+    Game.editor = new Editor(Game.worlds[0])
     #Start running
     setInterval(Game.run, 16)
 

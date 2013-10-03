@@ -19,3 +19,7 @@ class AppData
    'Hero9': 'Hero9.png'
    'PlaceHolder': 'PlaceHolder.png'
    'Skull': 'Skull.png'
+  @levels:
+   'Level': Level
+   'Level2': Level2
+

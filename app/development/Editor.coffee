@@ -2,6 +2,8 @@ class Editor
   grid: null
   builder: null
   printer: null
+  world: null
+  level: ''
 
   entity_selector: null
 
@@ -13,8 +15,16 @@ class Editor
   grid_height_button: null
   grid_toggle_button: null
 
-  constructor: ->
+  constructor:(world) ->
+    @world = world
     @printer = new LevelPrinter
+    @builder = new Builder(this)
+    @grid = new Grid
+
+    @level_selector = $("#level_selector")
+    @level_selector.change(@level_change)
+    @level_change()
+
 
     @print_output = $('#printer_output')
     @print_type_selector = $("#print_type_selector")
@@ -22,7 +32,6 @@ class Editor
     @print_button = $("#print_button")
     @print_button.click(@print)
 
-    @builder = new Builder
 
     @entity_selector = $("#entity_selector")
     @entity_selector.change(@entity_change)
@@ -32,7 +41,6 @@ class Editor
     @pause_button.click(@toggle_pause)
     @pause_button.click(@entity_change)
 
-    @grid = new Grid
     @grid_x_button = $("#grid_x")
     @grid_y_button = $("#grid_y")
     @grid_width_button = $("#grid_width")
@@ -47,6 +55,11 @@ class Editor
 
   step: ->
     @builder.step()
+
+  level_change: =>
+    @level = @level_selector.val()
+    @world.destroy_all()
+    @builder.load_level(@level)
 
   print_type_change: =>
     @printer.type = @print_type_selector.val()

@@ -8,13 +8,10 @@ class World
   y: 0
   pause: false
 
-  #When all art has been loaded, init can continue
-  constructor: ->
-    @create_level()
-
   # create level
-  create_level: () ->
-    for key,value of Level1.level
+  load_level: (name) ->
+    lvl = new AppData.levels[name]
+    for key,value of lvl.data
       @spawn(value.name,value.x,value.y)
 
   # destroy all

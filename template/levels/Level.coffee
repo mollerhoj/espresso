@@ -1,6 +1,5 @@
-# Level1
-class Level1
-  @level:
+class Level
+  data:
     1: 
       name: 'Hero'
       x: 238
