@@ -7,7 +7,7 @@ class Art
   @_scale = 1
   
   @get_alpha: ->
-    return Game.context.globalAlpha = alpha
+    return Game.context.globalAlpha
 
   @alpha: (alpha) ->
     Game.context.globalAlpha = alpha

@@ -32,6 +32,6 @@ class Sprite
       result = Game.images[@name]
 
     if not result
-      console.log name
+      console.log "#{name} not found."
       result = Game.images['PlaceHolder']
     return result

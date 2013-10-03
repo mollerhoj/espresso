@@ -15,30 +15,12 @@
 
     Art._scale = 1;
 
-    Art._alpha = 1;
-
-    Art.get_scale = function() {
-      return this._scale;
-    };
-
-    Art.line = function(x, y, x2, y2) {
-      return Art.lineC(x + Art.offset_x, y + Art.offset_y, x2 + Art.offset_x, y2 + Art.offset_y);
-    };
-
     Art.get_alpha = function() {
-      return Art._alpha;
+      return Game.context.globalAlpha;
     };
 
     Art.alpha = function(alpha) {
-      Art._alpha = alpha;
       return Game.context.globalAlpha = alpha;
-    };
-
-    Art.lineC = function(x, y, x2, y2) {
-      Game.context.beginPath();
-      Game.context.moveTo(x + 0.5, y + 0.5);
-      Game.context.lineTo(x2 + 0.5, y2 + 0.5);
-      return Game.context.stroke();
     };
 
     Art.color = function(color) {
@@ -52,6 +34,17 @@
 
     Art.stroke_color = function(color) {
       return Game.context.strokeStyle = color;
+    };
+
+    Art.lineC = function(x, y, x2, y2) {
+      Game.context.beginPath();
+      Game.context.moveTo(x + 0.5, y + 0.5);
+      Game.context.lineTo(x2 + 0.5, y2 + 0.5);
+      return Game.context.stroke();
+    };
+
+    Art.line = function(x, y, x2, y2) {
+      return Art.lineC(x + Art.offset_x, y + Art.offset_y, x2 + Art.offset_x, y2 + Art.offset_y);
     };
 
     Art.rectangleC = function(x, y, w, h, filled) {
@@ -227,7 +220,6 @@
 
     Game.init = function(mode) {
       var i;
-      console.log(mode);
       this.mode = mode;
       Game.context = Game.create_canvas();
       Game.set_zoom(AppData.scale);
@@ -239,7 +231,6 @@
 
     Game.start = function() {
       Game.add_world();
-      console.log(Game.mode);
       if (Game.mode === "build") {
         Game.editor = new Editor(Game.worlds[0]);
       }
@@ -540,7 +531,7 @@
         result = Game.images[this.name];
       }
       if (!result) {
-        console.log(name);
+        console.log("" + name + " not found.");
         result = Game.images['PlaceHolder'];
       }
       return result;
@@ -779,13 +770,13 @@
     World.prototype.draw = function() {
       var entity, _i, _len, _ref, _results;
       Art.color('#EFF8FB');
-      Art.rectangleC(0, 0, AppData.width * AppData.scale / Art.get_scale(), AppData.height * AppData.scale / Art.get_scale(), true);
+      Art.rectangleC(0, 0, AppData.width * AppData.scale / Game.zoom_level, AppData.height * AppData.scale / Game.zoom_level, true);
       Art.color('#000000');
       this._entities.sort(function(a, b) {
-        if (a.z > b.z) {
-          return 1;
+        if (Math.sign(a.z - b.z) === 0) {
+          return Math.sign(a.y - b.y);
         } else {
-          return -1;
+          return Math.sign(a.z - b.z);
         }
       });
       _ref = this._entities;
@@ -1125,12 +1116,9 @@
       if (this.hold) {
         this.hold.x = Keyboard.MOUSE_X;
         this.hold.y = Keyboard.MOUSE_Y;
-        console.log(this.hold);
-        console.log(this.grid);
-        console.log(Keyboard.hold('SHIFT'));
         if (Keyboard.hold('SHIFT') && this.grid) {
-          this.hold.x -= (Keyboard.MOUSE_X - this.grid.x) % this.grid.width - this.grid.width / 2;
-          this.hold.y -= (Keyboard.MOUSE_Y - this.grid.y) % this.grid.height - this.grid.width / 2;
+          this.hold.x = this.hold.x - this.hold.x % this.grid.width + this.grid.width / 2;
+          this.hold.y = this.hold.y - this.hold.y % this.grid.height + this.grid.height / 2;
         }
         this.hold.sx = this.hold.x;
         this.hold.sy = this.hold.y;

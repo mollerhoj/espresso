@@ -50,12 +50,9 @@ class Builder
     if @hold
       @hold.x = Keyboard.MOUSE_X
       @hold.y = Keyboard.MOUSE_Y
-      console.log @hold
-      console.log @grid
-      console.log Keyboard.hold('SHIFT')
       if Keyboard.hold('SHIFT') and @grid
-        @hold.x -= (Keyboard.MOUSE_X - @grid.x) % @grid.width-@grid.width/2
-        @hold.y -= (Keyboard.MOUSE_Y - @grid.y) % @grid.height-@grid.width/2
+        @hold.x=@hold.x - @hold.x % @grid.width+@grid.width/2
+        @hold.y=@hold.y - @hold.y % @grid.height+@grid.height/2
       @hold.sx = @hold.x
       @hold.sy = @hold.y
 

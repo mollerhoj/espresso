@@ -80,12 +80,12 @@ class World
   draw: ->
     #Draw background
     Art.color '#EFF8FB'
-    Art.rectangleC 0,0,AppData.width * AppData.scale / Art.get_scale(),AppData.height * AppData.scale / Art.get_scale(),true
+    Art.rectangleC 0,0,AppData.width * AppData.scale / Game.zoom_level,AppData.height * AppData.scale / Game.zoom_level,true
     Art.color '#000000'
 
     #Sort for z values. not tested.
     @_entities.sort (a,b) ->
-      return if a.z > b.z then 1 else -1
+      return if Math.sign(a.z-b.z)==0 then Math.sign(a.y-b.y) else Math.sign(a.z-b.z)
     
     #Draw all entities
     for entity in @_entities when entity.visible is true

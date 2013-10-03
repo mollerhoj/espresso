@@ -159,7 +159,12 @@ write_development_tools = (mode) ->
     <option value='Grid'>Grid</option>\n
     <option value='Vector'>Vector</option>\n
   </select>\n
-  <button type='button' id='save_button'>Save</button>"
+  <button type='button' id='save_button'>Save</button>\n
+  <ul/>\n
+    <li><strong>Left mouse:</strong> Spawn entity.\n
+    <li><strong>Right mouse:</strong> Spawn entity.\n
+    <li><strong>Shift:</strong> Snap to grid.\n
+  <ul>"
   return str
 
 write_development_selector= (resource) ->
