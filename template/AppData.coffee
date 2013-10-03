@@ -3,6 +3,7 @@ class AppData
   @width = 320
   @height = 240
   @scale = 2
+  @grid_on = false
   @entities:
    'Hero': Hero
    'Skull': Skull
@@ -22,4 +23,5 @@ class AppData
   @levels:
    'Level': Level
    'Level2': Level2
+   'Level3': Level3
 

@@ -2,5 +2,5 @@
 
 $ = Zepto
 
-$ -> 
-  Game.init()
+$ ->
+  Game.init('build')

@@ -7,11 +7,13 @@ class Game
   @zoom_level: 1
   @pause = false
   @editor = null
+  @mode = ""
 
   @add_world: ->
     Game.worlds.push(new World)
 
-  @init: ->
+  @init:(mode) ->
+    @mode = mode
     #Create canvas:
     Game.context = Game.create_canvas()
 
@@ -25,11 +27,14 @@ class Game
     i.onload = Game.start
     i.load_images()
     
-  @start: ->
+  @start: =>
     #Create a world
     Game.add_world()
 
-    Game.editor = new Editor(Game.worlds[0])
+    #Create editor
+    if @mode=="build"
+      Game.editor = new Editor(Game.worlds[0])
+
     #Start running
     setInterval(Game.run, 16)
 

@@ -1,7 +1,6 @@
 class Editor
   grid: null
   builder: null
-  printer: null
   world: null
   level: ''
 
@@ -17,7 +16,6 @@ class Editor
 
   constructor:(world) ->
     @world = world
-    @printer = new LevelPrinter
     @builder = new Builder(this)
     @grid = new Grid
 
@@ -25,13 +23,10 @@ class Editor
     @level_selector.change(@level_change)
     @level_change()
 
-
-    @print_output = $('#printer_output')
-    @print_type_selector = $("#print_type_selector")
-    @print_type_selector.change(@print_type_change)
-    @print_button = $("#print_button")
-    @print_button.click(@print)
-
+    @save_type_selector = $("#save_type_selector")
+    @save_type_selector.change(@save_type_selector)
+    @save_button = $("#save_button")
+    @save_button.click(@save)
 
     @entity_selector = $("#entity_selector")
     @entity_selector.change(@entity_change)
@@ -61,28 +56,29 @@ class Editor
     @world.destroy_all()
     @world.load_level(@level)
 
-  print_type_change: =>
-    @printer.type = @print_type_selector.val()
+  save_type_change: =>
+    @builder.save_type = @save_type_selector.val()
 
-  print: =>
-    @print_output.html(@printer.print())
+  save: =>
+    level = @level_selector.val()
+    txt = @builder.output_level(level)
+    blob = new Blob([txt], {type : 'text/html'})
+    saveAs(blob,"#{level}.coffee")
 
   entity_change: =>
     @builder.entity = @entity_selector.val()
     
   grid_move: =>
-    @grid.x = $("#grid_x").val()
-    @grid.y = $("#grid_y").val()
-    @grid.width = $("#grid_width").val()
-    @grid.height = $("#grid_height").val()
+    @grid.x = parseInt $("#grid_x").val()
+    @grid.y = parseInt  $("#grid_y").val()
+    @grid.width = parseInt $("#grid_width").val()
+    @grid.height = parseInt $("#grid_height").val()
 
   toggle_grid: =>
     if @grid.visible
       @grid.visible = false
-      @grid_toggle_button.html('Grid on')
     else
       @grid.visible = true
-      @grid_toggle_button.html('Grid off')
 
   toggle_pause: =>
     if Game.pause

@@ -61,9 +61,11 @@ classlist= (mode)->
   files = add_folder(files,espresso_path + 'app/control/')
   files = add_folder(files,'entities')
   files = add_folder(files,'levels')
-  if mode = 'Development'
+  if mode == 'build'
     files = add_folder(files,espresso_path + 'app/development')
-  files.push(espresso_path + 'app/starters/Prod_Start')
+    files.push(espresso_path + 'app/starters/Development_Start')
+  else
+    files.push(espresso_path + 'app/starters/Production_Start')
   files.push('AppData')
   return files
 
@@ -79,6 +81,7 @@ class AppData\n
   @width = #{settings_width}\n
   @height = #{settings_height}\n
   @scale = #{settings_scale}\n
+  @grid_on = #{settings_grid_on}\n
   @entities:\n
 #{write_appdata_res('entities')}
   @sprites:\n
@@ -101,11 +104,13 @@ write_appdata_res =(res) ->
     str+="   '" + remove_extension(f) + "': " + remove_extension(f) + "\n"
   return str
 # Build index.html
-build_index = ->
+build_index = (mode)->
+
   file = "output/index.html"
   clear_file(file)
   put_to_file(file,"
 <head>\n
+  <script type='text/javascript' src='libraries/FileSaver.js'></script>
   <script type='text/javascript' src='libraries/zepto.js'></script>\n
   <script type='text/javascript' src='game.js'></script>\n
   <style>\n
@@ -116,7 +121,7 @@ build_index = ->
 </head>\n
 <body>\n
   <div id='game'></div>\n
-#{write_development_tools()}\n
+#{write_development_tools(mode)}\n
 </body>")
   return false
 
@@ -126,7 +131,10 @@ write_fonts = ->
     str+= "    @font-face {font-family: '"+remove_extension(font)+"'; src: url('fonts/"+font+"');}\n"
   return str
 
-write_development_tools = ->
+write_development_tools = (mode) ->
+  console.log mode
+  if mode!='build'
+    return ""
   str = "
   <button type='button' id='pause_toggle'>Pause</button>\n
   <select id='entity_selector'>\n
@@ -136,7 +144,7 @@ write_development_tools = ->
 #{write_development_selector('levels')}
   </select>\n
   </br>\n
-  <button type='button' id='grid_toggle'>Grid on</button>\n
+  <button type='button' id='grid_toggle'>Grid</button>\n
   <span>x:</span>\n
   <input id='grid_x'type='Number' value='0'></input>\n
   <span>y:</span>\n
@@ -146,13 +154,12 @@ write_development_tools = ->
   <span>height:</span>\n
   <input id='grid_height' type='Number' value='16'></input>
   </br>\n
-  <textarea cols='70' rows='0' id='printer_output'></textarea>\n
-  <select id='print_type_selector'>\n
+  <select id='save_type_selector'>\n
     <option value='Flow'>Flow</option>\n
     <option value='Grid'>Grid</option>\n
     <option value='Vector'>Vector</option>\n
   </select>\n
-  <button type='button' id='print_button'>Print</button>"
+  <button type='button' id='save_button'>Save</button>"
   return str
 
 write_development_selector= (resource) ->
@@ -169,8 +176,8 @@ build_resources = ->
   exec 'cp -r libraries output'
 
 # Build game.js
-build_game = ->
-  files = classlist('Development')
+build_game =(mode) ->
+  files = classlist(mode)
   appContents = new Array remaining = files.length
   for file, index in files then do (file, index) ->
     fs.readFile "#{file}.coffee", 'utf8', (err, fileContents) ->
@@ -193,11 +200,23 @@ compile_game = ->
 build_all = ->
   build_resources()
   build_appdata()
-  build_index()
-  build_game()
+  build_index('build')
+  build_game('build')
+  compile_game()
+
+#Export all
+export_all = ->
+  build_resources()
+  build_appdata()
+  build_index('export')
+  build_game('export')
   compile_game()
 
 #TASKS
+task 'export', 'Export single application file from source files', ->
+  export_all()
+  console.log 'Done.'
+
 task 'build', 'Build single application file from source files', ->
   build_all()
   console.log 'Done.'
