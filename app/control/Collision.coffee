@@ -1,7 +1,11 @@
 class Collision
+    world: null 
   
     # Check for collision between two objects
     @check: (type1,type2,x,y) ->
+      
+      if !@world
+        @world = Game.worlds[0]
 
       objects1 = []
       objects2 = []
@@ -11,7 +15,7 @@ class Collision
       if typeof type2 == 'object'
         objects2.push type2
       
-      for e in World.all_entities()
+      for e in @world.all_entities()
         if e.name == type1 or e.types.indexOf(type1) != -1
           objects1.push e
         if e.name == type2 or e.types.indexOf(type2) != -1

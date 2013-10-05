@@ -1,0 +1,17 @@
+class SnakeBody extends Entity
+  time: 0
+  solid: false
+  e: null
+
+  init: ->
+    @e = @world.spawn('SnakeBodyShadow',@x,@y)
+
+  step: ->
+    @time += 1
+    if @time > 10
+      @solid = true
+
+    if @time > 60+GameController.score*10
+      @destroy()
+    
+

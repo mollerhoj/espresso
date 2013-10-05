@@ -81,13 +81,14 @@ class Editor
       @grid.visible = true
 
   toggle_pause: =>
-    if Game.pause
-      Game.pause = false
-      @pause_button.html('Pause')
-    else
-      Game.pause = true
-      @pause_button.html('Play')
+    @set_pause(!Game.pause)
 
+  set_pause: (pause) =>
+    Game.pause = pause
+    if pause
+      @pause_button.html('Play')
+    else
+      @pause_button.html('Pause')
     for world in Game.worlds
       world.pause = Game.pause
 

@@ -20,7 +20,7 @@ class Sprite
       Game.context.save()
       Game.context.translate(x+image.width/2,y+image.height/2)
       Game.context.scale(@scale_x,@scale_y)
-      Game.context.rotate(Math.PI/180*@rotation)
+      Game.context.rotate(Math.PI/180*(0-@rotation))
       Game.context.drawImage(image,0,0,image.width,image.height,-image.width/2,-image.height/2,image.width,image.height)
       Game.context.restore()
 

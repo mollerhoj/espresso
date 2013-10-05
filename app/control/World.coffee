@@ -8,9 +8,13 @@ class World
   y: 0
   pause: false
 
+  constructor: ->
+    @load_level('Level')
+
   # create level
   load_level: (name) ->
     level = AppData.levels[name]
+    console.log level.data
     for key,value of level.data
       @spawn(value.name,value.x,value.y)
 
@@ -56,12 +60,12 @@ class World
     
     if entity.sprite == null
       entity.sprite = new Sprite
-      if Game.images[name] != null
-        entity.sprite.name = name
-        entity.w = Game.images[name].width
-        entity.h = Game.images[name].height
-      else
-        entity.sprite.name = 'PlaceHolder' 
+      if !Game.images[name] 
+        name = 'PlaceHolder' 
+      entity.sprite.name = name
+      entity.w = Game.images[name].width
+      entity.h = Game.images[name].height
+      entity.r = (entity.w+entity.h)/4
 
     @_entities.push (entity)
     entity.reset()

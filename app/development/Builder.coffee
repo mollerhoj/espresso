@@ -19,8 +19,8 @@ class Builder
       e = level.data[i]
       txt += "    #{i}:\n"
       txt += "      name: '#{e.name}'\n"
-      txt += "      x: '#{e.x}'\n"
-      txt += "      y: '#{e.y}'\n"
+      txt += "      x: #{e.x}\n"
+      txt += "      y: #{e.y}\n"
     return txt
 
   save_level:(name) ->
@@ -48,6 +48,8 @@ class Builder
 
     # Hold objects
     if @hold
+      if !Game.pause
+        @editor.set_pause(true)
       @hold.x = Keyboard.MOUSE_X
       @hold.y = Keyboard.MOUSE_Y
       if Keyboard.hold('SHIFT') and @grid
@@ -62,6 +64,7 @@ class Builder
 
     # Destroy objects
     if Keyboard.hold('MOUSE_RIGHT')
+      @editor.set_pause(true)
       temp_all_entities = @world.all_entities().slice(0)
       for e in temp_all_entities when e.mouse_hits()
         e.destroy()

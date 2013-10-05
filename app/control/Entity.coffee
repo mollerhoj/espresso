@@ -6,9 +6,9 @@ class Entity
   sy: 0
   w: undefined
   h: undefined
+  r: 0
   visible: true
   name: null
-  types: [] #Types used in collision
   scale_x: 1
   scale_y: 1
   offset_x: 0
@@ -32,10 +32,39 @@ class Entity
   step: ->
     return null
 
+  move_towards: (x,y,speed) ->
+    #dir = @direction_to(x,y)
+    
+    
+  direction_to: (x,y) ->
+    #dx = x - @x;
+    #dy = y - @y;
+    
+
   #Checks if this entity is touching another entity
   hits: (other,x = 0,y = 0) ->
-    result = Collision.check(this,other,x,y)
-    return result[1]
+    @x += x
+    @y += y
+    result = null #@collision(this,other,x,y)
+    @x -= x
+    @y -= y
+    return result
+
+  hit: (c) ->
+    for e in @world.all_entities()
+      if e.name == c
+        if @objects_touch(this,e)
+          return e
+    return null
+
+  objects_touch: (obj1,obj2) ->
+    return @objects_distance(obj1,obj2) <= obj1.r+obj2.r
+
+  objects_distance: (obj1,obj2) ->
+    return @points_distance(obj1.x,obj1.y,obj2.x,obj2.y)
+
+  points_distance: (x1,y1,x2,y2) ->
+    return Math.sqrt(Math.pow(x1-x2,2)+Math.pow(y1-y2,2))
 
   destroy: ->
     @world.destroy this
