@@ -2,7 +2,7 @@ ESPRESSO
 ========
 by Jens Dahl Møllerhøj
 
-# What is espresso?
+### What is espresso?
 A lightning fast game development engine. It is used to build tiny html5
 canvas games in minutes. Espresso is written entirely in coffeescript.
 
@@ -12,7 +12,7 @@ agile development.
 
 Its API resamples the way 'Game Maker' by Mark Overmars works.
 
-# Idea and philosopy
+### Idea and philosopy
 In classic software, an iterative development process help catch bugs early,
 and lets the system be designed as the developer learns. In indie game
 development, iterative processes lets the developer design games as
@@ -25,17 +25,17 @@ Just like Bret Victor believes that artists should have an imediate connection
 with their work, I believe that artistist need as high a number of iterations
 as possible. (This is almost, but not completely the same thing)
 
-# Why is it faster to build games with Espresso?
+### Why is it faster to build games with Espresso?
 
 Espresso generates all nesseary files for loading resourceses such as 
 sprites and entities from predefined folders. The entites step and draw
 methods are automatically called, and can use the espresso API
 
-# Is espresso ready to use?
+### Is espresso ready to use?
 Espresso is useable, but not very stable. The current release is really early.
 I've only spend about a week working on it.
 
-# What needs to be done?
+### What needs to be done?
 The level editor shall be presented more nice, a documentation for the use of
 the API and general accessability. Current tasks that is being worked on it in
 the TODO.txt file
@@ -57,10 +57,10 @@ See more at: http://www.blog.bridgeutopiaweb.com/post/how-to-install-coffeescrip
 
 $ npm install -g coffee-script
 
-# Documentation
+### Documentation
 Will be written as development goes..
 
-# Level Editor
+### Level Editor
 SPACE:     Show/Hide menu
 SHIFT:     Snap to grid
 ARROWKEYS: Move camera
